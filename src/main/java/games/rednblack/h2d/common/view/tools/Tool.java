@@ -30,7 +30,7 @@ public interface Tool {
     void stageMouseUp(float x, float y);
     void stageMouseDragged(float x, float y);
     void stageMouseDoubleClick(float x, float y);
-    void stageMouseScrolled(float amountX, float amountY);
+    boolean stageMouseScrolled(float amountX, float amountY);
     boolean itemMouseDown(Entity entity, float x, float y);
     void itemMouseUp(Entity entity, float x, float y);
     void itemMouseDragged(Entity entity, float x, float y);
