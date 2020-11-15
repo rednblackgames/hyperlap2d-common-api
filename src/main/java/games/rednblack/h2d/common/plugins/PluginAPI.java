@@ -24,12 +24,15 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import games.rednblack.editor.renderer.data.ProjectInfoVO;
 import games.rednblack.h2d.common.IItemCommand;
 import games.rednblack.h2d.common.view.tools.Tool;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import games.rednblack.editor.renderer.SceneLoader;
 import games.rednblack.h2d.common.vo.CursorData;
 import games.rednblack.h2d.common.vo.EditorConfigVO;
+import games.rednblack.h2d.common.vo.ProjectVO;
+import games.rednblack.h2d.common.vo.SceneConfigVO;
 import org.puremvc.java.interfaces.IFacade;
 
 import java.util.HashMap;
@@ -186,4 +189,19 @@ public interface PluginAPI {
      * returns current editor configs
      */
     EditorConfigVO getEditorConfig();
+
+    /**
+     * returns current scene configs
+     */
+    SceneConfigVO getCurrentSceneConfigVO();
+
+    /**
+     * returns current project
+     */
+    ProjectVO getCurrentProjectVO();
+
+    /**
+     * returns current project info
+     */
+    ProjectInfoVO getCurrentProjectInfoVO();
 }
