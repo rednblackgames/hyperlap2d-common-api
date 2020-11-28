@@ -54,9 +54,17 @@ public class StandardWidgetsFactory {
     }
 
     public static VisLabel createLabel(String text, String style, int alignment) {
+        return createLabel(text, style, alignment, false);
+    }
+
+    public static VisLabel createLabel(String text, String style, int alignment, boolean ellipsis) {
         Skin skin = VisUI.getSkin();
         VisLabel visLabel = new VisLabel(text, alignment);
         visLabel.setStyle(skin.get(style, Label.LabelStyle.class));
+        if (ellipsis) {
+            visLabel.setEllipsis(ellipsis);
+            visLabel.setWrap(true);
+        }
         return visLabel;
     }
 
