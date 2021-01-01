@@ -39,12 +39,6 @@ public class MsgAPI {
 
     public static final String SAVE_EDITOR_CONFIG = GLOBAL_PREFIX + ".SAVE_EDITOR_CONFIG";
 
-    public static final String OPEN_CODE_EDITOR = GLOBAL_PREFIX + ".OPEN_CODE_EDITOR";
-    public static final String OPEN_NODE_EDITOR = GLOBAL_PREFIX + ".OPEN_NODE_EDITOR";
-
-    public static final String OPEN_CONSOLE = GLOBAL_PREFIX + ".OPEN_CONSOLE";
-    public static final String WRITE_TO_CONSOLE = GLOBAL_PREFIX + ".WRITE_TO_CONSOLE";
-
     public static final String PROJECT_FILE_CREATED = GLOBAL_PREFIX + ".PROJECT_FILE_CREATED";
     public static final String PROJECT_FILE_DELETED = GLOBAL_PREFIX + ".PROJECT_FILE_DELETED";
     public static final String PROJECT_FILE_MODIFIED = GLOBAL_PREFIX + ".PROJECT_FILE_MODIFIED";
@@ -165,6 +159,12 @@ public class MsgAPI {
     /**
      *  Other
      */
+    public static final String OPEN_CODE_EDITOR = GLOBAL_PREFIX + ".OPEN_CODE_EDITOR";
+    public static final String OPEN_NODE_EDITOR = GLOBAL_PREFIX + ".OPEN_NODE_EDITOR";
+
+    public static final String OPEN_CONSOLE = GLOBAL_PREFIX + ".OPEN_CONSOLE";
+    public static final String WRITE_TO_CONSOLE = GLOBAL_PREFIX + ".WRITE_TO_CONSOLE";
+
     public static final String ITEM_FACTORY_PREFIX = "games.rednblack.editor.factory.ItemFactory";
     public static final String NEW_ITEM_ADDED = ITEM_FACTORY_PREFIX + ".NEW_ITEM_ADDED";
     public static final String SCENE_DATA_PREFIX = "games.rednblack.editor.proxy.SceneDataManager";
