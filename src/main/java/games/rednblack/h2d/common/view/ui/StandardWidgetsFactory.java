@@ -18,8 +18,10 @@
 
 package games.rednblack.h2d.common.view.ui;
 
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
@@ -35,6 +37,8 @@ import games.rednblack.h2d.common.view.ui.listener.CursorListener;
 import games.rednblack.h2d.common.view.ui.listener.ScrollFocusListener;
 import games.rednblack.h2d.common.view.ui.widget.TintButton;
 import org.puremvc.java.interfaces.IFacade;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 /**
  * Creates standard widgets like labels or text fields with provided standard HyperLap2D specific visual style.
@@ -165,7 +169,22 @@ public class StandardWidgetsFactory {
     }
 
     public static <T> VisSelectBox<T> createSelectBox(String style, Class<T> type) {
-        VisSelectBox<T> visSelectBox = new VisSelectBox<T>(style);
+        VisSelectBox<T> visSelectBox = new VisSelectBox<T>(style) {
+            @Override
+            protected void onShow(Actor selectBoxList, boolean below) {
+                selectBoxList.setOrigin(below ? Align.top : Align.bottom);
+                selectBoxList.setScaleY(0);
+                selectBoxList.clearActions();
+                selectBoxList.addAction(Actions.scaleTo(1, 1, 0.15f, Interpolation.swingOut));
+            }
+
+            @Override
+            protected void onHide(Actor selectBoxList) {
+                selectBoxList.clearActions();
+                selectBoxList.addAction(Actions.sequence(Actions.scaleTo(1, 0, 0.15f, Interpolation.swingIn),
+                        Actions.removeActor()));
+            }
+        };
         visSelectBox.clearListeners();
         visSelectBox.addListener(new CursorListener(Cursors.FINGER, facade));
         visSelectBox.addListener(new ClickListener() {
