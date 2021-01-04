@@ -8,32 +8,42 @@ import com.kotcrab.vis.ui.widget.PopupMenu;
 
 public class H2DPopupMenu extends PopupMenu {
 
-    public static final Interpolation.SwingOut swingOut = new Interpolation.SwingOut(1.05f);
     private static final float TRANSITION_TIME = 0.15f;
 
     private boolean removing = false;
+    private boolean animate;
 
     public H2DPopupMenu() {
-        super("noborder");
+        this(true);
+    }
+
+    public H2DPopupMenu(boolean animate) {
+        this.animate = animate;
         setTransform(true);
+        pad(9);
     }
 
     @Override
     public void showMenu(Stage stage, float x, float y) {
         super.showMenu(stage, x, y);
-        setOrigin(Align.topLeft);
-        setScale(1.4f);
-        getColor().a = 0;
-        clearActions();
-        addAction(Actions.parallel(
-                Actions.alpha(1, TRANSITION_TIME),
-                Actions.scaleTo(1, 1, TRANSITION_TIME, swingOut)
-        ));
+        if (animate) {
+            setOrigin(Align.topLeft);
+            setScale(1.4f);
+            getColor().a = 0;
+            clearActions();
+            addAction(Actions.parallel(
+                    Actions.alpha(1, TRANSITION_TIME),
+                    Actions.scaleTo(1, 1, TRANSITION_TIME, Interpolation.pow5Out)
+            ));
+        }
         removing = false;
     }
 
     @Override
     public boolean remove () {
+        if (!animate)
+            return super.remove();
+
         if (!removing) {
             removing = true;
             clearActions();
@@ -45,5 +55,13 @@ public class H2DPopupMenu extends PopupMenu {
                     Actions.run(super::remove)));
         }
         return removing;
+    }
+
+    public boolean isAnimate() {
+        return animate;
+    }
+
+    public void setAnimate(boolean animate) {
+        this.animate = animate;
     }
 }
