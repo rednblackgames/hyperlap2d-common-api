@@ -1,6 +1,5 @@
 package com.kotcrab.vis.ui.widget;
 
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,6 +15,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.highlight.BaseHighlighter;
 import com.kotcrab.vis.ui.util.highlight.Highlight;
 import com.kotcrab.vis.ui.util.highlight.Highlighter;
+import games.rednblack.h2d.common.util.H2DHighlight;
 
 /**
  * Text area implementation supporting highlighting words and scrolling in both X and Y directions.
@@ -26,16 +26,16 @@ import com.kotcrab.vis.ui.util.highlight.Highlighter;
  * have higher priority. If two highlights have the exactly the same start point, then it is undefined which highlight
  * will be used and depends on how array containing highlights will be sorted.
  * @author Kotcrab
+ * @author fgnm
  * @see Highlighter
- * @since 1.1.2
  */
-public class ConsoleTextArea extends HighlightTextArea {
+public class H2DHighlightTextArea extends HighlightTextArea {
     private Array<Highlight> highlights = new Array<>();
     private Array<Chunk> renderChunks = new Array<>();
     private boolean chunkUpdateScheduled = true;
     private Color defaultColor = Color.WHITE;
     private Color defaultBackgroundColor = Color.CLEAR;
-    private ConsoleHighlight.TextFormat defaultTextFormat = ConsoleHighlight.TextFormat.NORMAL;
+    private H2DHighlight.TextFormat defaultTextFormat = H2DHighlight.TextFormat.NORMAL;
 
     private BaseHighlighter highlighter;
 
@@ -43,30 +43,30 @@ public class ConsoleTextArea extends HighlightTextArea {
     private float maxAreaHeight = 0;
 
     private Color tmpColor = new Color();
-    private ConsoleStyle style;
+    private H2DHighlightTextAreaStyle style;
 
     private Drawable selectionDrawable;
     private float selectionX, selectionY;
     private boolean renderSelection = false;
 
-    public ConsoleTextArea (String text) {
+    public H2DHighlightTextArea(String text) {
         this(text, "default");
         init();
     }
 
-    public ConsoleTextArea (String text, String styleName) {
-        this(text, VisUI.getSkin().get(styleName, ConsoleStyle.class));
+    public H2DHighlightTextArea(String text, String styleName) {
+        this(text, VisUI.getSkin().get(styleName, H2DHighlightTextAreaStyle.class));
         init();
     }
 
-    public ConsoleTextArea (String text, ConsoleStyle style) {
+    public H2DHighlightTextArea(String text, H2DHighlightTextAreaStyle style) {
         super(text, style);
         init();
     }
 
     private void init() {
         softwrap = false;
-        style = (ConsoleStyle) getStyle();
+        style = (H2DHighlightTextAreaStyle) getStyle();
     }
 
     @Override
@@ -80,21 +80,17 @@ public class ConsoleTextArea extends HighlightTextArea {
         return new TextAreaListener() {
             @Override
             public boolean keyDown(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.V)
-                    return true;
-                return super.keyDown(event, keycode);
+                return onKeyDown(event, keycode) || super.keyDown(event, keycode);
             }
 
             @Override
             public boolean keyTyped(InputEvent event, char character) {
-                return false;
+                return onKeyTyped(event, character) || super.keyTyped(event, character);
             }
 
             @Override
             public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == Input.Keys.V)
-                    return true;
-                return super.keyUp(event, keycode);
+                return onKeyUp(event, keycode) || super.keyUp(event, keycode);
             }
 
             @Override
@@ -127,6 +123,39 @@ public class ConsoleTextArea extends HighlightTextArea {
         };
     }
 
+    /**
+     * Intercept keyDown event for custom actions
+     *
+     * @param event
+     * @param keycode
+     * @return
+     */
+    protected boolean onKeyDown(InputEvent event, int keycode) {
+        return false;
+    }
+
+    /**
+     * Intercept keyTyped event for custom actions
+     *
+     * @param event
+     * @param character
+     * @return
+     */
+    protected boolean onKeyTyped(InputEvent event, char character) {
+        return false;
+    }
+
+    /**
+     * Intercept keyUp event for custom actions
+     *
+     * @param event
+     * @param keycode
+     * @return
+     */
+    protected boolean onKeyUp(InputEvent event, int keycode) {
+        return false;
+    }
+
     @Override
     protected void calculateOffsets () {
         super.calculateOffsets();
@@ -148,17 +177,17 @@ public class ConsoleTextArea extends HighlightTextArea {
 
             for (; highlightIdx < highlights.size; ) {
                 Highlight highlight = highlights.get(highlightIdx);
-                ConsoleHighlight.TextFormat textFormat = ConsoleHighlight.TextFormat.NORMAL;
+                H2DHighlight.TextFormat textFormat = H2DHighlight.TextFormat.NORMAL;
                 Color backgroundColor = defaultColor;
                 if (highlight.getStart() > lineEnd) {
                     break;
                 }
 
-                if (highlight instanceof ConsoleHighlight) {
-                    ConsoleHighlight consoleHighlight = (ConsoleHighlight) highlight;
+                if (highlight instanceof H2DHighlight) {
+                    H2DHighlight h2DHighlight = (H2DHighlight) highlight;
 
-                    textFormat = consoleHighlight.getTextFormat();
-                    backgroundColor = consoleHighlight.getBackgroundColor();
+                    textFormat = h2DHighlight.getTextFormat();
+                    backgroundColor = h2DHighlight.getBackgroundColor();
                 }
 
                 if (highlight.getStart() == lineProgress || carryHighlight) {
@@ -214,20 +243,16 @@ public class ConsoleTextArea extends HighlightTextArea {
     }
 
     @Override
-    public void draw(Batch batch, float parentAlpha) {
-        try {
-            super.draw(batch, parentAlpha);
-        } catch (Exception ignore) {
-            //Ignore any exception that may occurs while drawing this
-        }
-    }
-
-    @Override
     protected void drawSelection(Drawable selection, Batch batch, BitmapFont font, float x, float y) {
-        selectionDrawable = selection;
-        selectionX = x;
-        selectionY = y;
-        renderSelection = true;
+        if (style.highlightBackground == null) {
+            renderSelection = false;
+            drawSelectionLater(selection, batch, font, x, y);
+        } else {
+            selectionDrawable = selection;
+            selectionX = x;
+            selectionY = y;
+            renderSelection = true;
+        }
     }
 
     protected void drawSelectionLater(Drawable selection, Batch batch, BitmapFont font, float x, float y) {
@@ -276,21 +301,24 @@ public class ConsoleTextArea extends HighlightTextArea {
         Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
         GlyphLayout layout = layoutPool.obtain();
 
-        for (int i = firstLineShowing * 2; i < (firstLineShowing + linesShowing) * 2 && i < linesBreak.size; i += 2) {
-            for (Chunk chunk : renderChunks) {
-                if (chunk.lineIndex == i) {
-                    layout.setText(font, chunk.text);
-                    tmpColor.set(batch.getColor());
+        if (style.highlightBackground != null) {
+            tmpColor.set(batch.getColor());
 
-                    batch.setColor(chunk.backgroundColor.r, chunk.backgroundColor.g, chunk.backgroundColor.b, chunk.backgroundColor.a * parentAlpha);
-                    style.underline.draw(batch, x + chunk.offsetX, y + offsetY - layout.height + font.getDescent(),
-                            layout.width, layout.height - font.getDescent() * 2.5f);
-                    batch.setColor(tmpColor);
+            for (int i = firstLineShowing * 2; i < (firstLineShowing + linesShowing) * 2 && i < linesBreak.size; i += 2) {
+                for (Chunk chunk : renderChunks) {
+                    if (chunk.lineIndex == i) {
+                        layout.setText(font, chunk.text);
+
+                        batch.setColor(chunk.backgroundColor.r, chunk.backgroundColor.g, chunk.backgroundColor.b, chunk.backgroundColor.a * parentAlpha);
+                        style.highlightBackground.draw(batch, x + chunk.offsetX, y + offsetY - layout.height + font.getDescent(),
+                                layout.width, layout.height - font.getDescent() * 2.5f);
+                        batch.setColor(tmpColor);
+                    }
                 }
-            }
 
-            offsetY -= font.getLineHeight() - font.getDescent();
-            maxAreaHeight += font.getLineHeight() - font.getDescent();
+                offsetY -= font.getLineHeight() - font.getDescent();
+                maxAreaHeight += font.getLineHeight() - font.getDescent();
+            }
         }
 
         if (renderSelection) {
@@ -308,11 +336,11 @@ public class ConsoleTextArea extends HighlightTextArea {
                     font.getColor().a *= parentAlpha;
                     font.draw(batch, chunk.text, x + chunk.offsetX, y + offsetY);
 
-                    if (style.underline != null && (chunk.textFormat == ConsoleHighlight.TextFormat.UNDERLINE
-                            || chunk.textFormat == ConsoleHighlight.TextFormat.STRIKE)) {
+                    if (style.underline != null && (chunk.textFormat == H2DHighlight.TextFormat.UNDERLINE
+                            || chunk.textFormat == H2DHighlight.TextFormat.STRIKE)) {
                         layout.setText(font, chunk.text);
                         tmpColor.set(batch.getColor());
-                        float underlineY = chunk.textFormat == ConsoleHighlight.TextFormat.STRIKE ? (layout.height - font.getDescent()) / 2f : layout.height - font.getDescent();
+                        float underlineY = chunk.textFormat == H2DHighlight.TextFormat.STRIKE ? (layout.height - font.getDescent()) / 2f : layout.height - font.getDescent();
                         batch.setColor(chunk.color.r, chunk.color.g, chunk.color.b, chunk.color.a * parentAlpha);
                         style.underline.draw(batch, x + chunk.offsetX, y + offsetY - underlineY, layout.width, 1.4f);
                         batch.setColor(tmpColor);
@@ -374,9 +402,9 @@ public class ConsoleTextArea extends HighlightTextArea {
         Color backgroundColor;
         float offsetX;
         int lineIndex;
-        ConsoleHighlight.TextFormat textFormat;
+        H2DHighlight.TextFormat textFormat;
 
-        public Chunk (String text, Color color, Color backgroundColor, float offsetX, int lineIndex, ConsoleHighlight.TextFormat textFormat) {
+        public Chunk (String text, Color color, Color backgroundColor, float offsetX, int lineIndex, H2DHighlight.TextFormat textFormat) {
             this.text = text;
             this.color = color;
             this.offsetX = offsetX;
@@ -386,19 +414,21 @@ public class ConsoleTextArea extends HighlightTextArea {
         }
     }
 
-    public static class ConsoleStyle extends VisTextFieldStyle {
+    public static class H2DHighlightTextAreaStyle extends VisTextFieldStyle {
         public Drawable underline;
+        public Drawable highlightBackground;
 
-        public ConsoleStyle() {
+        public H2DHighlightTextAreaStyle() {
         }
 
-        public ConsoleStyle(BitmapFont font, Color fontColor, Drawable cursor, Drawable selection, Drawable background) {
+        public H2DHighlightTextAreaStyle(BitmapFont font, Color fontColor, Drawable cursor, Drawable selection, Drawable background) {
             super(font, fontColor, cursor, selection, background);
         }
 
-        public ConsoleStyle(ConsoleStyle style) {
+        public H2DHighlightTextAreaStyle(H2DHighlightTextAreaStyle style) {
             super(style);
             this.underline = style.underline;
+            this.highlightBackground = style.highlightBackground;
         }
     }
 }

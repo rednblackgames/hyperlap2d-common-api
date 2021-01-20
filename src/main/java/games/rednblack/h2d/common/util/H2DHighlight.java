@@ -1,20 +1,13 @@
-package com.kotcrab.vis.ui.widget;
+package games.rednblack.h2d.common.util;
 
 import com.badlogic.gdx.graphics.Color;
 import com.kotcrab.vis.ui.util.highlight.Highlight;
 
-/**
- * Represents single highlight.
- * @author Kotcrab
- * @since 1.1.2
- */
-public class ConsoleHighlight extends Highlight {
+public class H2DHighlight extends Highlight {
     public enum TextFormat {
         NORMAL,
         UNDERLINE,
-        STRIKE,
-        BOLD,
-        ITALIC
+        STRIKE
     }
 
     private Color color;
@@ -23,7 +16,7 @@ public class ConsoleHighlight extends Highlight {
     private int end;
     private TextFormat textFormat;
 
-    public ConsoleHighlight (Color color, Color backgroundColor, int start, int end, TextFormat textFormat) {
+    public H2DHighlight(Color color, Color backgroundColor, int start, int end, TextFormat textFormat) {
         super(color, start, end);
         if (textFormat == null) throw new IllegalArgumentException("textFormat can't be null");
         if (color == null) throw new IllegalArgumentException("color can't be null");
