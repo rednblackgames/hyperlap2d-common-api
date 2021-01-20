@@ -18,19 +18,22 @@ public class ConsoleHighlight extends Highlight {
     }
 
     private Color color;
+    private Color backgroundColor;
     private int start;
     private int end;
     private TextFormat textFormat;
 
-    public ConsoleHighlight (Color color, int start, int end, TextFormat textFormat) {
+    public ConsoleHighlight (Color color, Color backgroundColor, int start, int end, TextFormat textFormat) {
         super(color, start, end);
         if (textFormat == null) throw new IllegalArgumentException("textFormat can't be null");
         if (color == null) throw new IllegalArgumentException("color can't be null");
+        if (backgroundColor == null) throw new IllegalArgumentException("backgroundColor can't be null");
         if (start >= end) throw new IllegalArgumentException("start can't be >= end: " + start + " >= " + end);
         this.color = color;
         this.start = start;
         this.end = end;
         this.textFormat = textFormat;
+        this.backgroundColor = backgroundColor;
     }
 
     public Color getColor () {
@@ -70,5 +73,13 @@ public class ConsoleHighlight extends Highlight {
     public void setTextFormat(TextFormat textFormat) {
         if (textFormat == null) throw new IllegalArgumentException("textFormat can't be null");
         this.textFormat = textFormat;
+    }
+
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
+
+    public void setBackgroundColor(Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
     }
 }

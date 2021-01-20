@@ -34,6 +34,7 @@ public class ConsoleTextArea extends HighlightTextArea {
     private Array<Chunk> renderChunks = new Array<>();
     private boolean chunkUpdateScheduled = true;
     private Color defaultColor = Color.WHITE;
+    private Color defaultBackgroundColor = Color.CLEAR;
     private ConsoleHighlight.TextFormat defaultTextFormat = ConsoleHighlight.TextFormat.NORMAL;
 
     private BaseHighlighter highlighter;
@@ -43,6 +44,10 @@ public class ConsoleTextArea extends HighlightTextArea {
 
     private Color tmpColor = new Color();
     private ConsoleStyle style;
+
+    private Drawable selectionDrawable;
+    private float selectionX, selectionY;
+    private boolean renderSelection = false;
 
     public ConsoleTextArea (String text) {
         this(text, "default");
@@ -91,6 +96,34 @@ public class ConsoleTextArea extends HighlightTextArea {
                     return true;
                 return super.keyUp(event, keycode);
             }
+
+            @Override
+            protected void setCursorPosition (float x, float y) {
+                moveOffset = -1;
+
+                Drawable background = style.background;
+                BitmapFont font = style.font;
+
+                float height = getHeight();
+
+                if (background != null) {
+                    height -= background.getTopHeight();
+                    x -= background.getLeftWidth();
+                }
+                x = Math.max(0, x);
+                if (background != null) {
+                    y -= background.getTopHeight();
+                }
+
+                float lineHeight = font.getLineHeight() - font.getDescent();
+                cursorLine = (int) Math.floor((height - y) / lineHeight) + firstLineShowing;
+                cursorLine = Math.max(0, Math.min(cursorLine, getLines() - 1));
+
+                lastBlink = 0;
+                cursorOn = false;
+                cursor = Math.min(letterUnderCursor(x), text.length());
+                updateCurrentLine();
+            }
         };
     }
 
@@ -116,16 +149,20 @@ public class ConsoleTextArea extends HighlightTextArea {
             for (; highlightIdx < highlights.size; ) {
                 Highlight highlight = highlights.get(highlightIdx);
                 ConsoleHighlight.TextFormat textFormat = ConsoleHighlight.TextFormat.NORMAL;
+                Color backgroundColor = defaultColor;
                 if (highlight.getStart() > lineEnd) {
                     break;
                 }
 
                 if (highlight instanceof ConsoleHighlight) {
-                    textFormat = ((ConsoleHighlight) highlight).getTextFormat();
+                    ConsoleHighlight consoleHighlight = (ConsoleHighlight) highlight;
+
+                    textFormat = consoleHighlight.getTextFormat();
+                    backgroundColor = consoleHighlight.getBackgroundColor();
                 }
 
                 if (highlight.getStart() == lineProgress || carryHighlight) {
-                    renderChunks.add(new Chunk(text.substring(lineProgress, Math.min(highlight.getEnd(), lineEnd)), highlight.getColor(), chunkOffset, lineIdx, textFormat));
+                    renderChunks.add(new Chunk(text.substring(lineProgress, Math.min(highlight.getEnd(), lineEnd)), highlight.getColor(), backgroundColor, chunkOffset, lineIdx, textFormat));
                     lineProgress = Math.min(highlight.getEnd(), lineEnd);
 
                     if (highlight.getEnd() > lineEnd) {
@@ -150,7 +187,7 @@ public class ConsoleTextArea extends HighlightTextArea {
                         }
                     }
                     if (noMatch) break;
-                    renderChunks.add(new Chunk(text.substring(lineProgress, highlight.getStart()), defaultColor, chunkOffset, lineIdx, defaultTextFormat));
+                    renderChunks.add(new Chunk(text.substring(lineProgress, highlight.getStart()), defaultColor, defaultBackgroundColor, chunkOffset, lineIdx, defaultTextFormat));
                     lineProgress = highlight.getStart();
                 }
 
@@ -162,7 +199,7 @@ public class ConsoleTextArea extends HighlightTextArea {
             }
 
             if (lineProgress < lineEnd) {
-                renderChunks.add(new Chunk(text.substring(lineProgress, lineEnd), defaultColor, chunkOffset, lineIdx, defaultTextFormat));
+                renderChunks.add(new Chunk(text.substring(lineProgress, lineEnd), defaultColor, defaultBackgroundColor, chunkOffset, lineIdx, defaultTextFormat));
             }
         }
 
@@ -186,33 +223,105 @@ public class ConsoleTextArea extends HighlightTextArea {
     }
 
     @Override
+    protected void drawSelection(Drawable selection, Batch batch, BitmapFont font, float x, float y) {
+        selectionDrawable = selection;
+        selectionX = x;
+        selectionY = y;
+        renderSelection = true;
+    }
+
+    protected void drawSelectionLater(Drawable selection, Batch batch, BitmapFont font, float x, float y) {
+        int i = firstLineShowing * 2;
+        float offsetY = -font.getDescent();
+        int minIndex = Math.min(cursor, selectionStart);
+        int maxIndex = Math.max(cursor, selectionStart);
+        while (i + 1 < linesBreak.size && i < (firstLineShowing + linesShowing) * 2) {
+
+            int lineStart = linesBreak.get(i);
+            int lineEnd = linesBreak.get(i + 1);
+
+            if (!((minIndex < lineStart && minIndex < lineEnd && maxIndex < lineStart && maxIndex < lineEnd)
+                    || (minIndex > lineStart && minIndex > lineEnd && maxIndex > lineStart && maxIndex > lineEnd))) {
+
+                int start = Math.max(linesBreak.get(i), minIndex);
+                int end = Math.min(linesBreak.get(i + 1), maxIndex);
+
+                float selectionX = glyphPositions.get(start) - glyphPositions.get(linesBreak.get(i));
+                float selectionWidth = glyphPositions.get(end) - glyphPositions.get(start);
+
+                selection.draw(batch, x + selectionX + fontOffset, y - textHeight - font.getDescent() - offsetY, selectionWidth,
+                        font.getLineHeight() - font.getDescent());
+            }
+
+            offsetY += font.getLineHeight() - font.getDescent();
+            i += 2;
+        }
+    }
+
+    @Override
+    protected void drawCursor (Drawable cursorPatch, Batch batch, BitmapFont font, float x, float y) {
+        float textOffset = cursor >= glyphPositions.size || cursorLine * 2 >= linesBreak.size ? 0
+                : glyphPositions.get(cursor) - glyphPositions.get(linesBreak.items[cursorLine * 2]);
+        cursorX = textOffset + fontOffset + font.getData().cursorX;
+        cursorPatch.draw(batch, x + cursorX,
+                y - font.getDescent() / 2 - (cursorLine - firstLineShowing + 1) * (font.getLineHeight() - font.getDescent()), cursorPatch.getMinWidth(),
+                font.getLineHeight() - font.getDescent());
+    }
+
+    @Override
     protected void drawText (Batch batch, BitmapFont font, float x, float y) {
         maxAreaHeight = 0;
-        float offsetY = 0;
+        float offsetY = font.getDescent();
         float parentAlpha = font.getColor().a;
         Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
         GlyphLayout layout = layoutPool.obtain();
+
+        for (int i = firstLineShowing * 2; i < (firstLineShowing + linesShowing) * 2 && i < linesBreak.size; i += 2) {
+            for (Chunk chunk : renderChunks) {
+                if (chunk.lineIndex == i) {
+                    layout.setText(font, chunk.text);
+                    tmpColor.set(batch.getColor());
+
+                    batch.setColor(chunk.backgroundColor.r, chunk.backgroundColor.g, chunk.backgroundColor.b, chunk.backgroundColor.a * parentAlpha);
+                    style.underline.draw(batch, x + chunk.offsetX, y + offsetY - layout.height + font.getDescent(),
+                            layout.width, layout.height - font.getDescent() * 2.5f);
+                    batch.setColor(tmpColor);
+                }
+            }
+
+            offsetY -= font.getLineHeight() - font.getDescent();
+            maxAreaHeight += font.getLineHeight() - font.getDescent();
+        }
+
+        if (renderSelection) {
+            renderSelection = false;
+            batch.setColor(tmpColor);
+            drawSelectionLater(selectionDrawable, batch, font, selectionX, selectionY);
+        }
+
+        maxAreaHeight = 0;
+        offsetY = font.getDescent();
         for (int i = firstLineShowing * 2; i < (firstLineShowing + linesShowing) * 2 && i < linesBreak.size; i += 2) {
             for (Chunk chunk : renderChunks) {
                 if (chunk.lineIndex == i) {
                     font.setColor(chunk.color);
                     font.getColor().a *= parentAlpha;
                     font.draw(batch, chunk.text, x + chunk.offsetX, y + offsetY);
+
                     if (style.underline != null && (chunk.textFormat == ConsoleHighlight.TextFormat.UNDERLINE
                             || chunk.textFormat == ConsoleHighlight.TextFormat.STRIKE)) {
                         layout.setText(font, chunk.text);
-                        float underlineY = chunk.textFormat == ConsoleHighlight.TextFormat.STRIKE ? layout.height / 2f - 4: layout.height;
-                        underlineY += 5;
                         tmpColor.set(batch.getColor());
-                        batch.setColor(chunk.color);
-                        style.underline.draw(batch, x + chunk.offsetX, y + offsetY - underlineY, layout.width, 1);
+                        float underlineY = chunk.textFormat == ConsoleHighlight.TextFormat.STRIKE ? (layout.height - font.getDescent()) / 2f : layout.height - font.getDescent();
+                        batch.setColor(chunk.color.r, chunk.color.g, chunk.color.b, chunk.color.a * parentAlpha);
+                        style.underline.draw(batch, x + chunk.offsetX, y + offsetY - underlineY, layout.width, 1.4f);
                         batch.setColor(tmpColor);
                     }
                 }
             }
 
-            offsetY -= font.getLineHeight();
-            maxAreaHeight += font.getLineHeight();
+            offsetY -= font.getLineHeight() - font.getDescent();
+            maxAreaHeight += font.getLineHeight() - font.getDescent();
         }
         layoutPool.free(layout);
         maxAreaHeight += 30;
@@ -262,16 +371,18 @@ public class ConsoleTextArea extends HighlightTextArea {
     private static class Chunk {
         String text;
         Color color;
+        Color backgroundColor;
         float offsetX;
         int lineIndex;
         ConsoleHighlight.TextFormat textFormat;
 
-        public Chunk (String text, Color color, float offsetX, int lineIndex, ConsoleHighlight.TextFormat textFormat) {
+        public Chunk (String text, Color color, Color backgroundColor, float offsetX, int lineIndex, ConsoleHighlight.TextFormat textFormat) {
             this.text = text;
             this.color = color;
             this.offsetX = offsetX;
             this.lineIndex = lineIndex;
             this.textFormat = textFormat;
+            this.backgroundColor = backgroundColor;
         }
     }
 
