@@ -394,13 +394,6 @@ public class H2DHighlightTextArea extends HighlightTextArea {
         return maxAreaHeight + 5;
     }
 
-    @Override
-    public ScrollPane createCompatibleScrollPane () {
-        ScrollPane scrollPane = super.createCompatibleScrollPane();
-        scrollPane.setScrollingDisabled(false, false);
-        return scrollPane;
-    }
-
     private static class Chunk {
         String text;
         Color color;
