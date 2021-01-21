@@ -123,6 +123,11 @@ public class H2DHighlightTextArea extends HighlightTextArea {
         };
     }
 
+    @Override
+    protected boolean isWordCharacter(char c) {
+        return c == '_' || super.isWordCharacter(c);
+    }
+
     /**
      * Intercept keyDown event for custom actions
      *
