@@ -7,7 +7,8 @@ public class H2DHighlight extends Highlight {
     public enum TextFormat {
         NORMAL,
         UNDERLINE,
-        STRIKE
+        STRIKE,
+        RESET
     }
 
     private Color color;
