@@ -11,14 +11,8 @@ public class H2DPopupMenu extends PopupMenu {
     private static final float TRANSITION_TIME = 0.15f;
 
     private boolean removing = false;
-    private boolean animate;
 
     public H2DPopupMenu() {
-        this(true);
-    }
-
-    public H2DPopupMenu(boolean animate) {
-        this.animate = animate;
         setTransform(true);
         pad(9);
     }
@@ -26,24 +20,19 @@ public class H2DPopupMenu extends PopupMenu {
     @Override
     public void showMenu(Stage stage, float x, float y) {
         super.showMenu(stage, x, y);
-        if (animate) {
-            setOrigin(Align.topLeft);
-            setScale(1.4f);
-            getColor().a = 0;
-            clearActions();
-            addAction(Actions.parallel(
-                    Actions.alpha(1, TRANSITION_TIME),
-                    Actions.scaleTo(1, 1, TRANSITION_TIME, Interpolation.pow5Out)
-            ));
-        }
+        setOrigin(Align.topLeft);
+        setScale(1.4f);
+        getColor().a = 0;
+        clearActions();
+        addAction(Actions.parallel(
+                Actions.alpha(1, TRANSITION_TIME),
+                Actions.scaleTo(1, 1, TRANSITION_TIME, Interpolation.pow5Out)
+        ));
         removing = false;
     }
 
     @Override
     public boolean remove () {
-        if (!animate)
-            return super.remove();
-
         if (!removing) {
             removing = true;
             clearActions();
@@ -55,13 +44,5 @@ public class H2DPopupMenu extends PopupMenu {
                     Actions.run(super::remove)));
         }
         return removing;
-    }
-
-    public boolean isAnimate() {
-        return animate;
-    }
-
-    public void setAnimate(boolean animate) {
-        this.animate = animate;
     }
 }
