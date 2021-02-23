@@ -2,8 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'games.rednblack'
-version '0.0.5'
+apply from : 'publish.gradle'
 
 repositories {
     mavenCentral()
