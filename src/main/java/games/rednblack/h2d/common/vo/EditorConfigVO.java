@@ -26,6 +26,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EditorConfigVO {
+    private static final Json json = new Json();
+
     public static final String EDITOR_CONFIG_FILE = "config.pit";
     public String lastOpenedSystemPath = "";
     public String lastImportedSystemPath = "";
@@ -38,12 +40,13 @@ public class EditorConfigVO {
     public boolean enablePlugins = true;
     public Color backgroundColor = new Color(0.15f, 0.15f, 0.15f, 1.0f);
 
+    public float uiScaleDensity = 1f;
+
     //Map to store plugin storage
     public Map<String, Map<String, Object>> pluginStorage = new HashMap<>();
 
     public String constructJsonString() {
         String str = "";
-        Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
         str = json.toJson(this);
         return str;
