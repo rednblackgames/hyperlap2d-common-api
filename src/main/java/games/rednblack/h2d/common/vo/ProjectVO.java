@@ -35,7 +35,7 @@ public class ProjectVO {
     public String lastOpenScene = "";
     public String lastOpenResolution = "";
     public boolean lockLines = false;
-    public int gridSize = 1;
+    public float gridSize = 1;
     public Color backgroundColor = new Color(0,0,0,1);
     public boolean box2dDebugRender = false;
 
