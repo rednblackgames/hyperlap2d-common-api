@@ -19,8 +19,10 @@
 package games.rednblack.h2d.common.view.ui.widget;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -100,6 +102,15 @@ public class InputFileWidget extends VisTable {
                     }
                 });
                 executor.shutdown();
+            }
+        });
+
+        textField.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                if (!textField.getText().equals(getValue().path())) {
+                    setValue(new FileHandle(textField.getText()));
+                }
             }
         });
     }
