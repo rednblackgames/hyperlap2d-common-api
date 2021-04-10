@@ -19,13 +19,8 @@
 package games.rednblack.h2d.common;
 
 public interface ProgressHandler {
-
-	public void progressStarted();
-	
-	public void progressChanged(float value);
-	
-	public void progressComplete();
-
-	public void progressFailed();
-	
+	void progressStarted();
+	void progressChanged(float value);
+	void progressComplete();
+	void progressFailed();
 }
