@@ -6,9 +6,9 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.IntArray;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 import com.kotcrab.vis.ui.VisUI;
@@ -30,19 +30,19 @@ import games.rednblack.h2d.common.util.H2DHighlight;
  * @see Highlighter
  */
 public class H2DHighlightTextArea extends HighlightTextArea {
-    private Array<Highlight> highlights = new Array<>();
-    private Array<Chunk> renderChunks = new Array<>();
+    private final Array<Highlight> highlights = new Array<>();
+    private final Array<Chunk> renderChunks = new Array<>();
     private boolean chunkUpdateScheduled = true;
-    private Color defaultColor = Color.WHITE;
-    private Color defaultBackgroundColor = Color.CLEAR;
-    private H2DHighlight.TextFormat defaultTextFormat = H2DHighlight.TextFormat.NORMAL;
+    private final Color defaultColor = Color.WHITE;
+    private final Color defaultBackgroundColor = Color.CLEAR;
+    private final H2DHighlight.TextFormat defaultTextFormat = H2DHighlight.TextFormat.NORMAL;
 
     private BaseHighlighter highlighter;
 
     private float maxAreaWidth = 0;
     private float maxAreaHeight = 0;
 
-    private Color tmpColor = new Color();
+    private final Color tmpColor = new Color();
     private H2DHighlightTextAreaStyle style;
 
     private Drawable selectionDrawable;
@@ -392,6 +392,14 @@ public class H2DHighlightTextArea extends HighlightTextArea {
     @Override
     public float getPrefHeight () {
         return maxAreaHeight + 5;
+    }
+
+    public IntArray getLinesBreak() {
+        return linesBreak;
+    }
+
+    public void insertText(String text) {
+        paste(text, true);
     }
 
     private static class Chunk {
