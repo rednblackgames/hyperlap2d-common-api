@@ -3,6 +3,7 @@ package games.rednblack.h2d.common.view.ui.widget.imagetabbedpane;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -482,6 +483,8 @@ public class ImageTabbedPane {
         public float tabPadding = 5;
         /** Optional, set all tabs with equal width in a single line. */
         public boolean singleLine = false;
+        /** If Icon is not provided fall back to text style. */
+        public BitmapFont font;
 
         public TabbedPaneStyle () {
         }
@@ -542,40 +545,58 @@ public class ImageTabbedPane {
     }
 
     private class TabButtonTable extends VisTable {
-        public VisImageButton button;
+        public Button button;
         public VisImageButton closeButton;
         private ImageTab tab;
 
-        private VisImageButton.VisImageButtonStyle buttonStyle;
+        private Button.ButtonStyle buttonStyle;
         private VisImageButton.VisImageButtonStyle closeButtonStyle;
         private Drawable up;
 
         private boolean dimSet = false;
-        private Cell<VisImageButton> cellButton;
+        private Cell<Button> cellButton;
         private int index;
 
         public TabButtonTable (ImageTab tab, int index) {
             this.tab = tab;
             this.index = index;
 
-            buttonStyle = new VisImageButton.VisImageButtonStyle(style.buttonStyle);
             if (tab.getTabIconStyle() != null) {
+                buttonStyle = new VisImageButton.VisImageButtonStyle(style.buttonStyle);
+                VisImageButton.VisImageButtonStyle style = (VisImageButton.VisImageButtonStyle) buttonStyle;
+
                 VisImageButton.VisImageButtonStyle tabIconStyle = VisUI.getSkin().get(tab.getTabIconStyle(), VisImageButton.VisImageButtonStyle.class);
-                buttonStyle.imageUp = tabIconStyle.imageUp;
-                buttonStyle.imageOver = tabIconStyle.imageOver;
-                buttonStyle.imageDown = tabIconStyle.imageDown;
+                style.imageUp = tabIconStyle.imageUp;
+                style.imageOver = tabIconStyle.imageOver;
+                style.imageDown = tabIconStyle.imageDown;
+
+                button = new VisImageButton(style) {
+                    @Override
+                    public void setDisabled (boolean isDisabled) {
+                        super.setDisabled(isDisabled);
+                        closeButton.setDisabled(isDisabled);
+                        deselect();
+                    }
+                };
+
+                new Tooltip.Builder(getTabTitle(tab)).target(button).build();
+                ((VisImageButton) button).setFocusBorderEnabled(false);
+                button.setProgrammaticChangeEvents(false);
+            } else {
+                buttonStyle = new VisTextButton.VisTextButtonStyle(style.buttonStyle.up, style.buttonStyle.down, style.buttonStyle.checked, style.font);
+
+                VisTextButton.VisTextButtonStyle style = (VisTextButton.VisTextButtonStyle) buttonStyle;
+                button = new VisTextButton(getTabTitle(tab), style) {
+                    @Override
+                    public void setDisabled (boolean isDisabled) {
+                        super.setDisabled(isDisabled);
+                        closeButton.setDisabled(isDisabled);
+                        deselect();
+                    }
+                };
+                ((VisTextButton) button).setFocusBorderEnabled(false);
+                button.setProgrammaticChangeEvents(false);
             }
-            button = new VisImageButton(buttonStyle) {
-                @Override
-                public void setDisabled (boolean isDisabled) {
-                    super.setDisabled(isDisabled);
-                    closeButton.setDisabled(isDisabled);
-                    deselect();
-                }
-            };
-            new Tooltip.Builder(getTabTitle(tab)).target(button).build();
-            button.setFocusBorderEnabled(false);
-            button.setProgrammaticChangeEvents(false);
 
             closeButtonStyle = new VisImageButton.VisImageButtonStyle(VisUI.getSkin().get("close", VisImageButton.VisImageButtonStyle.class));
 

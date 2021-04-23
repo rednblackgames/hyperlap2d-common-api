@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import games.rednblack.editor.renderer.data.ProjectInfoVO;
 import games.rednblack.h2d.common.IItemCommand;
+import games.rednblack.h2d.common.factory.IFactory;
 import games.rednblack.h2d.common.view.tools.Tool;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import games.rednblack.editor.renderer.SceneLoader;
@@ -148,12 +149,11 @@ public interface PluginAPI {
     void removeFollower(Entity entity);
 
     /**
-     * Draws an image at selected position
-     * @param regionName name of texture region to create image from
-     * @param position position to draw image at
-     * @return image entity
+     * Get a factory that draws assets to the scene at specific location
+     *
+     * @return IFactory interface
      */
-    Entity drawImage(String regionName, Vector2 position);
+    IFactory getItemFactory();
 
     /**
      * @return entities that are on scene
