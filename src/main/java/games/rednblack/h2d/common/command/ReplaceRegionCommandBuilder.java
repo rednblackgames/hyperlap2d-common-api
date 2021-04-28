@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import games.rednblack.h2d.common.MsgAPI;
 import org.puremvc.java.interfaces.IFacade;
 
-public class UpdateRegionCommandBuilder {
+public class ReplaceRegionCommandBuilder {
 
     private Object[] payload;
 
@@ -23,6 +23,6 @@ public class UpdateRegionCommandBuilder {
     }
 
     public void execute(IFacade facade) {
-        facade.sendNotification(MsgAPI.ACTION_UPDATE_REGION_DATA, payload);
+        facade.sendNotification(MsgAPI.ACTION_REPLACE_REGION_DATA, payload);
     }
 }
