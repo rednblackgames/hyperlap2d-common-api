@@ -74,6 +74,7 @@ public class MsgAPI {
 
     private static final String IMAGES_TAB_MEDIATOR_PREFIX= "games.rednblack.editor.view.ui.box.resourcespanel.UIImagesTabMediator";
     public static final String ADD_TARGET = IMAGES_TAB_MEDIATOR_PREFIX + ".ADD_TARGET";
+    public static final String REMOVE_TARGET = IMAGES_TAB_MEDIATOR_PREFIX + ".REMOVE_TARGET";
 
     /**
      *  Previous Sandbox class notifications
