@@ -55,7 +55,6 @@ public class CursorManager extends Proxy {
 
     public void setOverrideCursor(CursorData cursor) {
         overrideCursor = cursor;
-        region = null;
     }
 
     public void removeOverrideCursor() {
@@ -82,7 +81,7 @@ public class CursorManager extends Proxy {
         }
 
         Pixmap cursorPm;
-        if (region == null) {
+        if (region == null || overrideCursor != null) {
             cursorPm = new Pixmap(Gdx.files.internal("cursors/" + currentCursor.region + ".png"));
         } else {
             Texture texture = region.getTexture();
