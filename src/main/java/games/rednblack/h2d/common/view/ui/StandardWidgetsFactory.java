@@ -81,13 +81,25 @@ public class StandardWidgetsFactory {
     }
     
     public static VisTextField createTextField(String style) {
-    	VisTextField visTextField = new VisTextField("", style);
+    	VisTextField visTextField = new VisTextField("", style) {
+            @Override
+            public void setText(String str) {
+                super.setText(str);
+                setCursorAtTextEnd();
+            }
+        };
     	visTextField.addListener(new CursorListener(Cursors.TEXT, facade));
     	return visTextField;
     }
 
     public static VisTextField createTextField(String style, boolean textCursor) {
-    	VisTextField visTextField = new VisTextField();
+    	VisTextField visTextField = new VisTextField() {
+            @Override
+            public void setText(String str) {
+                super.setText(str);
+                setCursorAtTextEnd();
+            }
+        };
         Skin skin = VisUI.getSkin();
         visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
         if(textCursor)
@@ -113,7 +125,13 @@ public class StandardWidgetsFactory {
     }
 
     public static VisValidatableTextField createValidableTextField (String style, InputValidator inputValidator) {
-        VisValidatableTextField visTextField = new VisValidatableTextField(inputValidator);
+        VisValidatableTextField visTextField = new VisValidatableTextField(inputValidator) {
+            @Override
+            public void setText(String str) {
+                super.setText(str);
+                setCursorAtTextEnd();
+            }
+        };
         Skin skin = VisUI.getSkin();
         visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
         visTextField.addListener(new CursorListener(Cursors.TEXT, facade));

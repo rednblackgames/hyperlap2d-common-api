@@ -30,9 +30,9 @@ import com.kotcrab.vis.ui.VisUI;
 public class TintButton extends Group {
 
     private final Skin skin;
-    private Image colorImg;
+    private final Image colorImg;
 
-    private Color colorValue;
+    private final Color colorValue = new Color();
 
     public TintButton(int width, int height) {
         skin = VisUI.getSkin();
@@ -59,7 +59,6 @@ public class TintButton extends Group {
 
     public void setColorValue(Color color) {
         colorImg.setColor(color);
-        colorValue = new Color(color);
+        colorValue.set(color);
     }
-
 }
