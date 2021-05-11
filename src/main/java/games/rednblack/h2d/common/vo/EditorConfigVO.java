@@ -42,6 +42,8 @@ public class EditorConfigVO {
 
     public float uiScaleDensity = 1f;
 
+    public int msaaSamples = 4;
+
     //Map to store plugin storage
     public Map<String, Map<String, Object>> pluginStorage = new HashMap<>();
 
