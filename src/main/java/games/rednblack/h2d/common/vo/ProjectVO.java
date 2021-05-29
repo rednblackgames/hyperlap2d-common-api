@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProjectVO {
 
@@ -38,6 +39,9 @@ public class ProjectVO {
     public float gridSize = 1;
     public Color backgroundColor = new Color(0,0,0,1);
     public boolean box2dDebugRender = false;
+
+    public HashMap<String, TexturePackVO> imagesPacks = new HashMap<>();
+    public HashMap<String, TexturePackVO> animationsPacks = new HashMap<>();
 
     public TexturePackerVO texturePackerVO = new TexturePackerVO();
 
