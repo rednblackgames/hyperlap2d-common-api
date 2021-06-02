@@ -40,9 +40,6 @@ public class ProjectVO {
     public Color backgroundColor = new Color(0,0,0,1);
     public boolean box2dDebugRender = false;
 
-    public HashMap<String, TexturePackVO> imagesPacks = new HashMap<>();
-    public HashMap<String, TexturePackVO> animationsPacks = new HashMap<>();
-
     public TexturePackerVO texturePackerVO = new TexturePackerVO();
 
     public ArrayList<SceneConfigVO> sceneConfigs = new ArrayList<>();
