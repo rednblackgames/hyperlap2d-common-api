@@ -86,7 +86,7 @@ public interface PluginAPI {
     /**
      * @return TextureAtlas of loaded project
      */
-    TextureAtlas getProjectTextureAtlas();
+    TextureAtlas.AtlasRegion getProjectTextureRegion(String regionName);
 
 
     /**
