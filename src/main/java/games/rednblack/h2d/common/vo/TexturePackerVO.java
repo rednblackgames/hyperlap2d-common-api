@@ -20,7 +20,7 @@ public class TexturePackerVO {
 
     public String maxWidth = "2048";
     public String maxHeight = "2048";
-    public boolean duplicate;
+    public boolean duplicate = true;
     public boolean square;
     public String filterMag = "Linear";
     public String filterMin = "Linear";
