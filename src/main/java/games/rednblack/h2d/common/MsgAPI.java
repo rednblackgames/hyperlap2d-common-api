@@ -191,4 +191,6 @@ public class MsgAPI {
     public static final String SHOW_NOTIFICATION = GLOBAL_PREFIX + ".SHOW_NOTIFICATION";
 
     public static final String ADD_PLUGIN_SETTINGS = GLOBAL_PREFIX + ".ADD_PLUGIN_SETTINGS";
+
+    public static final String UPDATE_ATLAS_PACK_LIST = GLOBAL_PREFIX + ".UPDATE_ATLAS_PACK_LIST";
 }
