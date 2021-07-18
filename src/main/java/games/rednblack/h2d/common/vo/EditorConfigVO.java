@@ -47,6 +47,7 @@ public class EditorConfigVO {
 
     //Map to store plugin storage
     public Map<String, Map<String, Object>> pluginStorage = new HashMap<>();
+    public HashMap<String, Boolean> enabledFilters = new HashMap<>();
 
     public String constructJsonString() {
         String str = "";

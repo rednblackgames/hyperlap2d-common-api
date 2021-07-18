@@ -81,6 +81,9 @@ public class MsgAPI {
     public static final String IMAGE_BUNDLE_DROP_SINGLE       = RESOURCES_BOX_MEDIATOR_PREFIX + ".IMAGE_BUNDLE_DROP_SINGLE";
     public static final String IMAGE_BUNDLE_DROP			  = RESOURCES_BOX_MEDIATOR_PREFIX + ".IMAGE_BUNDLE_DROP";
 
+    public static final String ADD_RESOURCES_BOX_FILTER = RESOURCES_BOX_MEDIATOR_PREFIX + ".ADD_FILTER";
+    public static final String UPDATE_RESOURCES_LIST = RESOURCES_BOX_MEDIATOR_PREFIX + ".UPDATE_RESOURCES_LIST";
+
     /**
      *  Previous Sandbox class notifications
      */

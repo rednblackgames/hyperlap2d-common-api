@@ -22,10 +22,7 @@ import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextTooltip;
-import com.badlogic.gdx.scenes.scene2d.ui.TooltipManager;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
@@ -35,6 +32,8 @@ import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 import games.rednblack.h2d.common.view.ui.listener.CursorListener;
 import games.rednblack.h2d.common.view.ui.listener.ScrollFocusListener;
+import games.rednblack.h2d.common.view.ui.widget.H2DTextTooltip;
+import games.rednblack.h2d.common.view.ui.widget.H2DTooltipManager;
 import games.rednblack.h2d.common.view.ui.widget.TintButton;
 import org.puremvc.java.interfaces.IFacade;
 
@@ -48,6 +47,10 @@ public class StandardWidgetsFactory {
     private static IFacade facade;
     public static void init(IFacade f) {
         facade = f;
+        H2DTooltipManager.getInstance().initialTime = 1;
+        H2DTooltipManager.getInstance().maxWidth = 250;
+        H2DTooltipManager.getInstance().offsetX = 11;
+        H2DTooltipManager.getInstance().offsetY = 15;
     }
 
     private StandardWidgetsFactory() {
@@ -240,16 +243,11 @@ public class StandardWidgetsFactory {
         return scrollPane;
     }
 
-    public static void addVisTooltip(Actor actor, String text) {
-        new Tooltip.Builder(text).target(actor).build();
-    }
-
     public static void addTooltip(Actor actor, String text) {
-        TooltipManager.getInstance().initialTime = 1;
-        TooltipManager.getInstance().hideAll();
+        H2DTooltipManager.getInstance().hideAll();
 
-        TextTooltip tooltip = new TextTooltip(text, VisUI.getSkin());
-        tooltip.getContainer().pad(5);
+        H2DTextTooltip tooltip = new H2DTextTooltip(text, VisUI.getSkin());
+        tooltip.setFollowMouse(true);
         actor.addListener(tooltip);
     }
 
