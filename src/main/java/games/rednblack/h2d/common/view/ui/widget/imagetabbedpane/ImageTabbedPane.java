@@ -58,7 +58,7 @@ public class ImageTabbedPane {
     }
 
     public ImageTabbedPane (String styleName) {
-        this(VisUI.getSkin().get(TabbedPaneStyle.class));
+        this(VisUI.getSkin().get(styleName, TabbedPaneStyle.class));
     }
 
     public ImageTabbedPane (TabbedPaneStyle style) {
@@ -70,7 +70,7 @@ public class ImageTabbedPane {
         this.sizes = sizes;
         listeners = new Array<ImageTabbedPaneListener>();
 
-        sharedCloseActiveButtonStyle = VisUI.getSkin().get("close-active-tab", VisImageButton.VisImageButtonStyle.class);
+        sharedCloseActiveButtonStyle = VisUI.getSkin().get(style.sharedCloseButton, VisImageButton.VisImageButtonStyle.class);
 
         group = new ButtonGroup<Button>();
 
@@ -485,6 +485,8 @@ public class ImageTabbedPane {
         public boolean singleLine = false;
         /** If Icon is not provided fall back to text style. */
         public BitmapFont font;
+        public String sharedCloseButton = "close-active-tab";
+        public float tabSpacing = 0;
 
         public TabbedPaneStyle () {
         }
@@ -584,6 +586,8 @@ public class ImageTabbedPane {
                 button.setProgrammaticChangeEvents(false);
             } else {
                 buttonStyle = new VisTextButton.VisTextButtonStyle(style.buttonStyle.up, style.buttonStyle.down, style.buttonStyle.checked, style.font);
+                buttonStyle.over = style.buttonStyle.over;
+                buttonStyle.disabled = style.buttonStyle.disabled;
 
                 VisTextButton.VisTextButtonStyle style = (VisTextButton.VisTextButtonStyle) buttonStyle;
                 button = new VisTextButton(getTabTitle(tab), style) {
@@ -598,7 +602,7 @@ public class ImageTabbedPane {
                 button.setProgrammaticChangeEvents(false);
             }
 
-            closeButtonStyle = new VisImageButton.VisImageButtonStyle(VisUI.getSkin().get("close", VisImageButton.VisImageButtonStyle.class));
+            closeButtonStyle = new VisImageButton.VisImageButtonStyle(VisUI.getSkin().get(tab.getCloseButtonStyle(), VisImageButton.VisImageButtonStyle.class));
 
             closeButton = new VisImageButton(closeButtonStyle);
             closeButton.setGenerateDisabledImage(true);
@@ -610,9 +614,9 @@ public class ImageTabbedPane {
             closeButtonStyle = closeButton.getStyle();
             up = buttonStyle.up;
 
-            cellButton = add(button).width(button.getWidth() + style.tabPadding);
+            cellButton = add(button).width(button.getWidth() + style.tabPadding).padLeft(style.tabSpacing);
             if (tab.isCloseableByUser()) {
-                add(closeButton).size(14 * sizes.scaleFactor, button.getHeight());
+                add(closeButton).size(28 * sizes.scaleFactor, button.getHeight());
             }
         }
 
@@ -699,6 +703,8 @@ public class ImageTabbedPane {
                 }
 
                 private void setCloseButtonOnMouseMove () {
+                    if (!tab.getCloseButtonStyle().equals("close")) return;
+
                     if (isDown) {
                         closeButtonStyle.up = buttonStyle.down;
                     } else {
@@ -707,12 +713,14 @@ public class ImageTabbedPane {
                 }
 
                 private void setDraggedUpImage () {
-                    closeButtonStyle.up = buttonStyle.down;
+                    if (tab.getCloseButtonStyle().equals("close"))
+                        closeButtonStyle.up = buttonStyle.down;
                     buttonStyle.up = buttonStyle.down;
                 }
 
                 private void setDefaultUpImage () {
-                    closeButtonStyle.up = up;
+                    if (tab.getCloseButtonStyle().equals("close"))
+                        closeButtonStyle.up = up;
                     buttonStyle.up = up;
                 }
             });

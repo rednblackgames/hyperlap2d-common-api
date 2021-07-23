@@ -35,7 +35,7 @@ public class UIDraggablePanel extends H2DDialog {
     public boolean isOpen;
 
     public UIDraggablePanel(String title) {
-        super(title);
+        super(title, false);
         setMovable(true);
         setModal(false);
         setStyle(VisUI.getSkin().get("box", WindowStyle.class));

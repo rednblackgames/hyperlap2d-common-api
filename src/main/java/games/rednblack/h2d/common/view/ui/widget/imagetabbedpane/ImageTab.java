@@ -34,6 +34,11 @@ public abstract class ImageTab implements Disposable {
     /** @return tab style name used by image tabbed pane. */
     public abstract String getTabIconStyle();
 
+    /** @return tab style name used by image tabbed pane. */
+    public String getCloseButtonStyle() {
+        return "close";
+    }
+
     /**
      * @return table that contains this tab view, will be passed to tabbed pane listener. Should
      * return same table every time this is called.

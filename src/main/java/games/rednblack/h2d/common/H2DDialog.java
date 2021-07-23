@@ -19,10 +19,7 @@
 package games.rednblack.h2d.common;
 
 import com.badlogic.gdx.math.Interpolation;
-import com.badlogic.gdx.scenes.scene2d.Action;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -36,19 +33,35 @@ public class H2DDialog extends VisDialog {
 
 	static public final Interpolation.SwingOut swingOut = new Interpolation.SwingOut(1.1f);
 
-    public H2DDialog(String title) {
-        super(title);
-		init();
-    }
-
-    public H2DDialog(String title, String style) {
-    	super(title, style);
-    	init();
+	public H2DDialog(String title) {
+		this(title, true);
 	}
 
-    private void init() {
+    public H2DDialog(String title, boolean scrollFocus) {
+        super(title);
+		init(scrollFocus);
+    }
+
+	public H2DDialog(String title, String style) {
+		this(title, style, true);
+	}
+
+    public H2DDialog(String title, String style, boolean scrollFocus) {
+    	super(title, style);
+    	init(scrollFocus);
+	}
+
+    private void init(boolean scrollFocus) {
 		skin = VisUI.getSkin();
 		padTop(32);
+		if (scrollFocus) {
+			addListener(new InputListener() {
+				@Override
+				public boolean scrolled(InputEvent event, float x, float y, float amountX, float amountY) {
+					return true;
+				}
+			});
+		}
 	}
 
 	@Override
