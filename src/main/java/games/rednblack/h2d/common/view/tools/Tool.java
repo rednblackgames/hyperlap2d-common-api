@@ -18,7 +18,6 @@
 
 package games.rednblack.h2d.common.view.tools;
 
-import com.badlogic.ashley.core.Entity;
 import org.puremvc.java.interfaces.INotification;
 
 /**
@@ -31,14 +30,14 @@ public interface Tool {
     void stageMouseDragged(float x, float y);
     void stageMouseDoubleClick(float x, float y);
     boolean stageMouseScrolled(float amountX, float amountY);
-    boolean itemMouseDown(Entity entity, float x, float y);
-    void itemMouseUp(Entity entity, float x, float y);
-    void itemMouseDragged(Entity entity, float x, float y);
-    void itemMouseDoubleClick(Entity entity, float x, float y);
+    boolean itemMouseDown(int entity, float x, float y);
+    void itemMouseUp(int entity, float x, float y);
+    void itemMouseDragged(int entity, float x, float y);
+    void itemMouseDoubleClick(int entity, float x, float y);
     String getName();
     String getTitle();
     String getShortcut();
     void handleNotification(INotification notification);
-    void keyDown(Entity entity, int keycode);
-    void keyUp(Entity entity, int keycode);
+    void keyDown(int entity, int keycode);
+    void keyUp(int entity, int keycode);
 }

@@ -1,6 +1,5 @@
 package games.rednblack.h2d.common.command;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import games.rednblack.editor.renderer.components.DimensionsComponent;
@@ -16,10 +15,10 @@ public class TransformCommandBuilder {
 
     Array<Object> payload;
 
-    public void begin(Entity forEntity) {
+    public void begin(int forEntity, com.artemis.World engine) {
 
-        TransformComponent transformComponent = ComponentRetriever.get(forEntity, TransformComponent.class);
-        DimensionsComponent dimensionsComponent = ComponentRetriever.get(forEntity, DimensionsComponent.class);
+        TransformComponent transformComponent = ComponentRetriever.get(forEntity, TransformComponent.class, engine);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(forEntity, DimensionsComponent.class, engine);
         Object[] prevData = new Object[5];
 
         payload = new Array<>(3);

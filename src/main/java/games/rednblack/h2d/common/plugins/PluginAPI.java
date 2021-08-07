@@ -18,11 +18,8 @@
 
 package games.rednblack.h2d.common.plugins;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.PooledEngine;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import games.rednblack.editor.renderer.data.ProjectInfoVO;
 import games.rednblack.h2d.common.IItemCommand;
@@ -60,7 +57,7 @@ public interface PluginAPI {
      * Returns Ashley engine of main scene where all entities are located
      * @return Engine
      */
-    PooledEngine getEngine();
+    com.artemis.World getEngine();
 
     /**
      * Get simple libGDX Stage for UI part of editor, to add dialogs or other UI elements and widgets
@@ -146,7 +143,7 @@ public interface PluginAPI {
      * Removes follower object (selection rectangle) from particular entity (usually makes sense when entity is deleted without proper action)
      * @param entity
      */
-    void removeFollower(Entity entity);
+    void removeFollower(int entity);
 
     /**
      * Get a factory that draws assets to the scene at specific location
@@ -158,13 +155,13 @@ public interface PluginAPI {
     /**
      * @return entities that are on scene
      */
-    HashSet<Entity> getProjectEntities();
+    HashSet<Integer> getProjectEntities();
 
     /**
      * @param entity
      * @return if entity is on visible layer
      */
-    boolean isEntityVisible(Entity entity);
+    boolean isEntityVisible(int entity);
 
     /**
      * shows drop down menu with specified actions set

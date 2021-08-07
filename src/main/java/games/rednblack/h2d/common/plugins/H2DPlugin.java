@@ -18,7 +18,6 @@
 
 package games.rednblack.h2d.common.plugins;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.Set;
@@ -31,7 +30,7 @@ public interface H2DPlugin {
     String getName();
     void initPlugin();
 
-    public void setAPI(PluginAPI pluginAPI);
+    void setAPI(PluginAPI pluginAPI);
 
-    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet);
+    void onDropDownOpen(Set<Integer> selectedEntities, Array<String> actionsSet);
 }

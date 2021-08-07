@@ -11,11 +11,10 @@ repositories {
 
 dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
-    implementation "com.badlogicgames.ashley:ashley:$ashleyVersion"
     implementation "com.kotcrab.vis:vis-ui:$visuiVersion"
 
     implementation "org.lwjgl:lwjgl-tinyfd:3.2.3"
-
+    implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
     implementation "com.esotericsoftware.spine:spine-libgdx:$spineVersion"
 
     implementation 'net.mountainblade:modular:1.0'

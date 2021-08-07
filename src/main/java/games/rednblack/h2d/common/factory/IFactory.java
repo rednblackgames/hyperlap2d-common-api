@@ -1,10 +1,9 @@
 package games.rednblack.h2d.common.factory;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 
 public interface IFactory {
-    Entity getCreatedEntity();
+    int getCreatedEntity();
 
     boolean createSimpleImage(String regionName, Vector2 position);
     boolean createSpriteAnimation(String animationName, Vector2 position);

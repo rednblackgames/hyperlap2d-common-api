@@ -1,6 +1,5 @@
 package games.rednblack.h2d.common.command;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import games.rednblack.h2d.common.MsgAPI;
@@ -10,7 +9,7 @@ public class ReplaceSpriteAnimationCommandBuilder {
 
     private Object[] payload;
 
-    public void begin(Entity forEntity) {
+    public void begin(int forEntity) {
         payload = new Object[3];
         payload[0] = forEntity;
     }

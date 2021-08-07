@@ -17,7 +17,6 @@
  */
 
 package games.rednblack.h2d.common.plugins;
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import net.mountainblade.modular.Module;
 import org.puremvc.java.interfaces.IFacade;
@@ -56,7 +55,7 @@ public abstract class H2DPluginAdapter implements H2DPlugin, Module {
      * @param actionsSet list of current actions (notification id's) planned for this particular context menu, it can be modified by adding or removing elements.
      */
     @Override
-    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet) {
+    public void onDropDownOpen(Set<Integer> selectedEntities, Array<String> actionsSet) {
 
     }
 
