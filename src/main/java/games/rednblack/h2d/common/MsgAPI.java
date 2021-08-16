@@ -190,7 +190,7 @@ public class MsgAPI {
     public static final String SCENE_LOADED = SCENE_DATA_PREFIX + ".SCENE_LOADED";
 
     private static final String DELETE_ITEMS_COMMAND_CLASS_NAME = "games.rednblack.editor.controller.commands.DeleteItemsCommand";
-    public static final String DELETE_ITEMS_COMMAND_DONE = DELETE_ITEMS_COMMAND_CLASS_NAME + "DONE";
+    public static final String DELETE_ITEMS_COMMAND_DONE = DELETE_ITEMS_COMMAND_CLASS_NAME + ".DONE";
 
     public static final String SHOW_NOTIFICATION = GLOBAL_PREFIX + ".SHOW_NOTIFICATION";
 
