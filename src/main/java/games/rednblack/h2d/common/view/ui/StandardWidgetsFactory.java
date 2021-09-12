@@ -29,6 +29,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
+import com.kotcrab.vis.ui.widget.spinner.SimpleFloatSpinnerModel;
 import com.kotcrab.vis.ui.widget.spinner.Spinner;
 import games.rednblack.h2d.common.view.ui.listener.CursorListener;
 import games.rednblack.h2d.common.view.ui.listener.ScrollFocusListener;
@@ -163,6 +164,10 @@ public class StandardWidgetsFactory {
 
     public static Spinner createNumberSelector(String style, int initialValue, int min, int max, int step) {
         return new Spinner(style, "", new IntSpinnerModel(initialValue, min, max, step));
+    }
+
+    public static Spinner createNumberSelector(String style, float initialValue, float min, float max, float step) {
+        return new Spinner(style, "", new SimpleFloatSpinnerModel(initialValue, min, max, step));
     }
 
     public static VisTextArea createTextArea() {
