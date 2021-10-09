@@ -270,6 +270,12 @@ public class StandardWidgetsFactory {
         return button;
     }
 
+    public static VisImageTextButton createImageTextButton(String text, String style) {
+        VisImageTextButton button = new VisImageTextButton(text, style);
+        button.addListener(new CursorListener(Cursors.FINGER, facade));
+        return button;
+    }
+
     public static VisSlider createSlider(float min, float max, float step) {
         VisSlider slider = new VisSlider(min, max, step, false);
         slider.addListener(new CursorListener(Cursors.FINGER, facade));
