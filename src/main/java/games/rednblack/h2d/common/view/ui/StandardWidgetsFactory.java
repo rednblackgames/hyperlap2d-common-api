@@ -218,9 +218,9 @@ public class StandardWidgetsFactory {
                 if (pointer == 0 && button != 0) return false;
                 if (visSelectBox.isDisabled()) return false;
                 if (visSelectBox.getScrollPane().hasParent()) {
-                    visSelectBox.hideList();
+                    visSelectBox.hideScrollPane();
                 } else {
-                    visSelectBox.showList();
+                    visSelectBox.showScrollPane();
                     if (visSelectBox.getScrollPane().getWidth() > visSelectBox.getWidth()) {
                         visSelectBox.getScrollPane().setX(visSelectBox.getScrollPane().getX() + (visSelectBox.getWidth() - visSelectBox.getScrollPane().getWidth()));
                     }
