@@ -20,10 +20,9 @@ package games.rednblack.h2d.common.vo;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
+import games.rednblack.editor.renderer.utils.HyperJson;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ProjectVO {
 
@@ -46,8 +45,7 @@ public class ProjectVO {
 
     public String constructJsonString() {
         String str = "";
-        Json json = new Json();
-        json.setOutputType(OutputType.json);
+        Json json = HyperJson.getJson();
         str = json.toJson(this);
         return str;
     }

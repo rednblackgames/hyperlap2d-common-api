@@ -21,12 +21,13 @@ package games.rednblack.h2d.common.vo;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import games.rednblack.editor.renderer.utils.HyperJson;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class EditorConfigVO {
-    private static final Json json = new Json();
+    private static final Json json = HyperJson.getJson();
 
     public static final String EDITOR_CONFIG_FILE = "config.pit";
     public String lastOpenedSystemPath = "";
