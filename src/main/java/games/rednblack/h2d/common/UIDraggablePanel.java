@@ -40,8 +40,8 @@ public class UIDraggablePanel extends H2DDialog {
         setModal(false);
         setStyle(VisUI.getSkin().get("box", WindowStyle.class));
         getTitleLabel().setAlignment(Align.left);
-        padTop(26);
-        padLeft(10);
+        getTitleTable().padLeft(4).padTop(3);
+        padTop(32);
     }
 
     @Override
