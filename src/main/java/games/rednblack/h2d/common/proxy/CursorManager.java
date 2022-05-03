@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.utils.ObjectMap;
 import games.rednblack.h2d.common.view.ui.Cursors;
 import games.rednblack.h2d.common.vo.CursorData;
 import org.puremvc.java.patterns.proxy.Proxy;
@@ -37,6 +38,8 @@ public class CursorManager extends Proxy {
     private CursorData cursor;
     private TextureRegion region;
     private CursorData overrideCursor = null;
+
+    private final ObjectMap<String, Cursor> cursorCache = new ObjectMap<>();
 
     public CursorManager() {
         super(NAME);
@@ -80,19 +83,36 @@ public class CursorManager extends Proxy {
             return;
         }
 
-        Pixmap cursorPm;
+        Pixmap cursorPm = null;
+        Cursor cursorObj = null;
+        String cursorName = null;
         if (region == null || overrideCursor != null) {
-            cursorPm = new Pixmap(Gdx.files.internal("cursors/" + currentCursor.region + ".png"));
+            if (cursorCache.get(currentCursor.region) != null) {
+                cursorObj = cursorCache.get(currentCursor.region);
+            } else {
+                cursorPm = new Pixmap(Gdx.files.internal("cursors/" + currentCursor.region + ".png"));
+                cursorName = currentCursor.region;
+            }
         } else {
             Texture texture = region.getTexture();
-            if (!texture.getTextureData().isPrepared()) {
-                texture.getTextureData().prepare();
+            if (cursorCache.get(texture.toString()) != null) {
+                cursorObj = cursorCache.get(texture.toString());
+            } else {
+                if (!texture.getTextureData().isPrepared()) {
+                    texture.getTextureData().prepare();
+                }
+                cursorPm = texture.getTextureData().consumePixmap();
+                cursorName = texture.toString();
             }
-            cursorPm = texture.getTextureData().consumePixmap();
         }
 
-        Cursor cursorObj = Gdx.graphics.newCursor(cursorPm, currentCursor.getHotspotX(), currentCursor.getHotspotY());
+        if (cursorObj == null) {
+            cursorObj = Gdx.graphics.newCursor(cursorPm, currentCursor.getHotspotX(), currentCursor.getHotspotY());
+            cursorCache.put(cursorName, cursorObj);
+        }
         Gdx.graphics.setCursor(cursorObj);
-        cursorPm.dispose();
+
+        if (cursorPm != null)
+            cursorPm.dispose();
     }
 }
