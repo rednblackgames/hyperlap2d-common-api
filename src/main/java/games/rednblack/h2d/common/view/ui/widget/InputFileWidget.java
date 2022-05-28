@@ -78,18 +78,19 @@ public class InputFileWidget extends VisTable {
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.execute(() -> {
                     String selected;
+                    String defaultPath = textField.getText();
                     if (chooserMode == FileChooser.Mode.OPEN) {
                         //Open
                         if (chooserSelectionMode == FileChooser.SelectionMode.DIRECTORIES) {
                             //Select dir
-                            selected = TinyFileDialogs.tinyfd_selectFolderDialog("Choose a folder...", "");
+                            selected = TinyFileDialogs.tinyfd_selectFolderDialog("Choose a folder...", defaultPath);
                         } else {
                             //Select file
-                            selected = TinyFileDialogs.tinyfd_openFileDialog("Choose a file...", null, null, null, chooserMultiSelect);
+                            selected = TinyFileDialogs.tinyfd_openFileDialog("Choose a file...", defaultPath, null, null, chooserMultiSelect);
                         }
                     } else {
                         //Save
-                        selected = TinyFileDialogs.tinyfd_saveFileDialog("Choose a file...", null, null, null);
+                        selected = TinyFileDialogs.tinyfd_saveFileDialog("Choose a file...", defaultPath, null, null);
                     }
 
                     if (selected != null) {
