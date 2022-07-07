@@ -13,7 +13,7 @@ dependencies {
     implementation "com.badlogicgames.gdx:gdx:$gdxVersion"
     implementation "com.kotcrab.vis:vis-ui:$visuiVersion"
 
-    implementation "org.lwjgl:lwjgl-tinyfd:3.2.3"
+    implementation "org.lwjgl:lwjgl-tinyfd:$lwjgl3Version"
     implementation "net.onedaybeard.artemis:artemis-odb:$artemisVersion"
     implementation "com.esotericsoftware.spine:spine-libgdx:$spineVersion"
 
