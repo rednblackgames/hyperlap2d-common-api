@@ -109,6 +109,7 @@ public class MsgAPI {
     public static final String ACTION_DELETE_LAYER = SANDBOX_PREFIX + ".ACTION_DELETE_LAYER";
     public static final String ACTION_NEW_LAYER = SANDBOX_PREFIX + ".ACTION_NEW_LAYER";
     public static final String ACTION_SWAP_LAYERS = SANDBOX_PREFIX + ".ACTION_SWAP_LAYERS";
+    public static final String ACTION_JUMP_LAYERS = SANDBOX_PREFIX + ".ACTION_JUMP_LAYERS";
     public static final String ACTION_RENAME_LAYER = SANDBOX_PREFIX + ".ACTION_RENAME_LAYER";
 
     public static final String ACTION_ADD_COMPONENT = SANDBOX_PREFIX + ".ACTION_ADD_COMPONENT";
