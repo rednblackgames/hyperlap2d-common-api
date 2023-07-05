@@ -1,15 +1,15 @@
 package games.rednblack.h2d.common.view;
 
 import com.kotcrab.vis.ui.widget.VisTable;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
 public abstract class SettingsNodeValue<T> {
     private final VisTable contentTable = new VisTable();
     private T settings;
     private final String name;
-    protected IFacade facade;
+    protected Facade facade;
 
-    public SettingsNodeValue(String name, IFacade facade) {
+    public SettingsNodeValue(String name, Facade facade) {
         this.name = name;
         contentTable.top().left();
         this.facade = facade;

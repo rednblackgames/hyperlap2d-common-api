@@ -3,7 +3,7 @@ package games.rednblack.h2d.common.command;
 import com.esotericsoftware.spine.Skeleton;
 import com.esotericsoftware.spine.SkeletonJson;
 import games.rednblack.h2d.common.MsgAPI;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
 public class ReplaceSpineCommandBuilder {
 
@@ -26,7 +26,7 @@ public class ReplaceSpineCommandBuilder {
         payload[3] = skeleton;
     }
 
-    public void execute(IFacade facade) {
+    public void execute(Facade facade) {
         facade.sendNotification(MsgAPI.ACTION_REPLACE_SPINE_ANIMATION_DATA, payload);
     }
 }

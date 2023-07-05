@@ -6,7 +6,7 @@ import games.rednblack.editor.renderer.components.DimensionsComponent;
 import games.rednblack.editor.renderer.components.TransformComponent;
 import games.rednblack.editor.renderer.utils.ComponentRetriever;
 import games.rednblack.h2d.common.MsgAPI;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
 /**
  * Created by Osman on 01.08.2015.
@@ -73,7 +73,7 @@ public class TransformCommandBuilder {
         setOrigin(2, x, y);
     }
 
-    public void execute(IFacade facade) {
+    public void execute(Facade facade) {
         // check if payload is worth sending
         Object[] newData = (Object[]) payload.get(2);
         for(Object o : newData) {

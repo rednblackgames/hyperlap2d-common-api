@@ -24,6 +24,7 @@ package games.rednblack.h2d.common;
 public class MsgAPI {
 
     public static final String GLOBAL_PREFIX = "games.rednblack.editor.HyperLap2D";
+    public static final String STARTUP = "startup";
 
     public static final String CHECK_EDITS_ACTION = GLOBAL_PREFIX + ".APP_EXIT";
 

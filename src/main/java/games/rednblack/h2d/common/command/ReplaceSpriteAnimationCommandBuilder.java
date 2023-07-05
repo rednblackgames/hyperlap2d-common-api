@@ -3,7 +3,7 @@ package games.rednblack.h2d.common.command;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import games.rednblack.h2d.common.MsgAPI;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
 public class ReplaceSpriteAnimationCommandBuilder {
 
@@ -22,7 +22,7 @@ public class ReplaceSpriteAnimationCommandBuilder {
         payload[2] = regions;
     }
 
-    public void execute(IFacade facade) {
+    public void execute(Facade facade) {
         facade.sendNotification(MsgAPI.ACTION_REPLACE_SPRITE_ANIMATION_DATA, payload);
     }
 }

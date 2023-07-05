@@ -26,7 +26,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ObjectMap;
 import games.rednblack.h2d.common.view.ui.Cursors;
 import games.rednblack.h2d.common.vo.CursorData;
-import org.puremvc.java.patterns.proxy.Proxy;
+import games.rednblack.puremvc.Proxy;
 
 /**
  * Created by azakhary on 5/15/2015.
@@ -42,7 +42,7 @@ public class CursorManager extends Proxy {
     private final ObjectMap<String, Cursor> cursorCache = new ObjectMap<>();
 
     public CursorManager() {
-        super(NAME);
+        super(NAME, null);
 
         setCursor(Cursors.NORMAL);
     }

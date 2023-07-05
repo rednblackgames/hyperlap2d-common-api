@@ -18,7 +18,7 @@
 
 package games.rednblack.h2d.common.view.tools;
 
-import org.puremvc.java.interfaces.INotification;
+import games.rednblack.puremvc.interfaces.INotification;
 
 /**
  * Created by azakhary on 4/30/2015.

@@ -2,7 +2,7 @@ package games.rednblack.h2d.common.command;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import games.rednblack.h2d.common.MsgAPI;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
 public class ReplaceRegionCommandBuilder {
 
@@ -21,7 +21,7 @@ public class ReplaceRegionCommandBuilder {
         payload[2] = region;
     }
 
-    public void execute(IFacade facade) {
+    public void execute(Facade facade) {
         facade.sendNotification(MsgAPI.ACTION_REPLACE_REGION_DATA, payload);
     }
 }

@@ -1,6 +1,6 @@
 package games.rednblack.h2d.common;
 
-import org.puremvc.java.patterns.facade.Facade;
+import games.rednblack.puremvc.Facade;
 
 public class HyperLog {
 

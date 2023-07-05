@@ -37,17 +37,16 @@ import games.rednblack.h2d.common.view.ui.listener.ScrollFocusListener;
 import games.rednblack.h2d.common.view.ui.widget.H2DTextTooltip;
 import games.rednblack.h2d.common.view.ui.widget.H2DTooltipManager;
 import games.rednblack.h2d.common.view.ui.widget.TintButton;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 /**
  * Creates standard widgets like labels or text fields with provided standard HyperLap2D specific visual style.
  */
 public class StandardWidgetsFactory {
 
-    private static IFacade facade;
-    public static void init(IFacade f) {
+    private static Facade facade;
+    public static void init(Facade f) {
         facade = f;
         H2DTooltipManager.getInstance().initialTime = 1;
         H2DTooltipManager.getInstance().maxWidth = 250;

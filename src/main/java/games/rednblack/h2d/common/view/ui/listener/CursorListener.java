@@ -23,13 +23,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import games.rednblack.h2d.common.proxy.CursorManager;
 import games.rednblack.h2d.common.vo.CursorData;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
 public class CursorListener extends InputListener {
     private final CursorData cursor;
     private final CursorManager cursorManager;
 
-    public CursorListener(CursorData cursor, IFacade facade) {
+    public CursorListener(CursorData cursor, Facade facade) {
         this.cursor = cursor;
         cursorManager = facade.retrieveProxy(CursorManager.NAME);
     }

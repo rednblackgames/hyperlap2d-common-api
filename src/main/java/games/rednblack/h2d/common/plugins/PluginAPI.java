@@ -31,7 +31,7 @@ import games.rednblack.h2d.common.vo.CursorData;
 import games.rednblack.h2d.common.vo.EditorConfigVO;
 import games.rednblack.h2d.common.vo.ProjectVO;
 import games.rednblack.h2d.common.vo.SceneConfigVO;
-import org.puremvc.java.interfaces.IFacade;
+import games.rednblack.puremvc.Facade;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -51,7 +51,7 @@ public interface PluginAPI {
      * Returns MVC facade, to send notifications or commands, and register mediators
      * @return Facade
      */
-    IFacade getFacade();
+    Facade getFacade();
 
     /**
      * Returns Ashley engine of main scene where all entities are located
