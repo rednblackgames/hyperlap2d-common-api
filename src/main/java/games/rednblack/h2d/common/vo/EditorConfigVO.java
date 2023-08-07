@@ -37,6 +37,7 @@ public class EditorConfigVO {
     public long totalSpentTime = 0;
 
     public boolean disableAmbientComposite = true;
+    public boolean showBoundingBoxes = false;
     public boolean autoSave = false;
     public boolean enablePlugins = true;
     public Color backgroundColor = new Color(0.15f, 0.15f, 0.15f, 1.0f);
