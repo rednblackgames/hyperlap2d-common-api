@@ -242,28 +242,7 @@ public class StandardWidgetsFactory {
     }
 
     public static VisScrollPane createScrollPane(Actor actor) {
-        VisScrollPane scrollPane = new VisScrollPane(actor) {
-            //TODO remove with libGDX 1.11.1 release
-            @Override
-            public void scrollTo(float x, float y, float width, float height, boolean centerHorizontal, boolean centerVertical) {
-                validate();
-
-                float amountX = this.getScrollX();
-                if (centerHorizontal)
-                    amountX = x + (width - this.getScrollWidth()) / 2;
-                else
-                    amountX = MathUtils.clamp(amountX, x + width - this.getScrollWidth(), x);
-                scrollX(MathUtils.clamp(amountX, 0, this.getMaxX()));
-
-                float amountY = this.getScrollY();
-                y = getMaxY() - y;
-                if (centerVertical)
-                    amountY = y + (this.getScrollHeight() + height) / 2;
-                else
-                    amountY = MathUtils.clamp(amountY, y + height, y + this.getScrollHeight());
-                scrollY(MathUtils.clamp(amountY, 0, getMaxY()));
-            }
-        };
+        VisScrollPane scrollPane = new VisScrollPane(actor);
         scrollPane.addListener(new ScrollFocusListener());
         scrollPane.setFlickScroll(false);
         return scrollPane;
