@@ -47,6 +47,7 @@ public class EditorConfigVO {
     public int msaaSamples = 4;
     public int fpsLimit = 60;
     public boolean useANGLEGLES2 = true;
+    public boolean failSafeException = false;
 
     //Map to store plugin storage
     public Map<String, Map<String, Object>> pluginStorage = new HashMap<>();

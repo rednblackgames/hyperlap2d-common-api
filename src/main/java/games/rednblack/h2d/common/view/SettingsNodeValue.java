@@ -18,6 +18,7 @@ public abstract class SettingsNodeValue<T> {
     public abstract void translateSettingsToView();
     public abstract void translateViewToSettings();
     public abstract boolean validateSettings();
+    public abstract boolean requireRestart();
 
     public VisTable getContentTable() {
         return contentTable;
