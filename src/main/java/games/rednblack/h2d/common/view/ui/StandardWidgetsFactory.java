@@ -247,12 +247,13 @@ public class StandardWidgetsFactory {
         return scrollPane;
     }
 
-    public static void addTooltip(Actor actor, String text) {
+    public static H2DTextTooltip addTooltip(Actor actor, String text) {
         H2DTooltipManager.getInstance().hideAll();
 
         H2DTextTooltip tooltip = new H2DTextTooltip(text, VisUI.getSkin());
         tooltip.setFollowMouse(true);
         actor.addListener(tooltip);
+        return tooltip;
     }
 
     public static VisTextButton createTextButton(String text) {

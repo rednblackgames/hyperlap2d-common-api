@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.Null;
  * @author Nathan Sweet */
 public class H2DTextTooltip extends H2DTooltip<Label> {
 
+    private final Label label;
+
     public H2DTextTooltip (@Null String text, Skin skin) {
         this(text, H2DTooltipManager.getInstance(), skin.get(TextTooltip.TextTooltipStyle.class));
     }
@@ -33,16 +35,22 @@ public class H2DTextTooltip extends H2DTooltip<Label> {
     public H2DTextTooltip (@Null String text, final H2DTooltipManager manager, TextTooltip.TextTooltipStyle style) {
         super(null, manager);
 
-        Label label = new Label(text, style.label);
-        float fullWidth = label.getPrefWidth() + 1;
-        label.setWrap(true);
-        label.setWidth(Math.min(manager.maxWidth, fullWidth));
-
-        container.setActor(label);
-        container.width(label.getWidth());
+        label = new Label(text, style.label);
+        setText(text);
 
         setStyle(style);
         container.pad(5);
+    }
+
+    public void setText(String text) {
+        label.setWrap(false);
+        label.setText(text);
+        label.invalidate();
+        float fullWidth = label.getPrefWidth() + 1;
+        label.setWrap(true);
+        label.setWidth(Math.min(getManager().maxWidth, fullWidth));
+        container.setActor(label);
+        container.width(label.getWidth());
     }
 
     public void setStyle (TextTooltip.TextTooltipStyle style) {
