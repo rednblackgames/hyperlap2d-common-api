@@ -59,6 +59,7 @@ public class MsgAPI {
     public static final String LOCK_LINES_CHANGED = GLOBAL_PREFIX + ".LOCK_LINES_CHANGED";
     public static final String ITEM_DATA_UPDATED = GLOBAL_PREFIX + ".ITEM_DATA_UPDATED";
     public static final String ITEM_PROPERTY_DATA_FINISHED_MODIFYING = GLOBAL_PREFIX + ".ITEM_PROPERTY_DATA_FINISHED_MODIFYING";
+    public static final String UPDATE_TREE_ITEMS_FILTER = GLOBAL_PREFIX + ".UPDATE_TREE_ITEMS_FILTER";
 
     // this should move
     public static final String HIDE_SELECTIONS = GLOBAL_PREFIX + ".HIDE_SELECTIONS";
