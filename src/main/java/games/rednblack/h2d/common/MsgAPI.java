@@ -195,6 +195,8 @@ public class MsgAPI {
 
     public static final String OPEN_CONSOLE = GLOBAL_PREFIX + ".OPEN_CONSOLE";
     public static final String WRITE_TO_CONSOLE = GLOBAL_PREFIX + ".WRITE_TO_CONSOLE";
+    public static final String SHOW_MINI_MAP = GLOBAL_PREFIX + ".SHOW_MINI_MAP";
+    public static final String HIDE_MINI_MAP = GLOBAL_PREFIX + ".HIDE_MINI_MAP";
 
     public static final String ITEM_FACTORY_PREFIX = "games.rednblack.editor.factory.ItemFactory";
     public static final String NEW_ITEM_ADDED = ITEM_FACTORY_PREFIX + ".NEW_ITEM_ADDED";
