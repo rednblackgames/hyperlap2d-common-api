@@ -38,6 +38,7 @@ public class EditorConfigVO {
 
     public boolean disableAmbientComposite = true;
     public boolean showBoundingBoxes = false;
+    public float scrollVelocity = 30f;
     public boolean autoSave = false;
     public boolean enablePlugins = true;
     public Color backgroundColor = new Color(0.15f, 0.15f, 0.15f, 1.0f);
