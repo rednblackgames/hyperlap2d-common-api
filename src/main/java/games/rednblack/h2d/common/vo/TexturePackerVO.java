@@ -25,6 +25,7 @@ public class TexturePackerVO {
     public boolean square;
     public String filterMag = "Linear";
     public String filterMin = "Linear";
+    public boolean fast = true;
 
     public  TexturePackerVO() {
 
@@ -38,6 +39,7 @@ public class TexturePackerVO {
         filterMag = vo.filterMag;
         filterMin = vo.filterMin;
         legacy = vo.legacy;
+        fast = vo.fast;
     }
 
     @Override
@@ -48,6 +50,7 @@ public class TexturePackerVO {
         return duplicate == that.duplicate &&
                 square == that.square &&
                 legacy == that.legacy &&
+                fast == that.fast &&
                 Objects.equals(maxWidth, that.maxWidth) &&
                 Objects.equals(maxHeight, that.maxHeight) &&
                 Objects.equals(filterMag, that.filterMag) &&
@@ -56,6 +59,6 @@ public class TexturePackerVO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(maxWidth, maxHeight, duplicate, square, legacy, filterMag, filterMin);
+        return Objects.hash(maxWidth, maxHeight, duplicate, square, legacy, filterMag, filterMin, fast);
     }
 }
