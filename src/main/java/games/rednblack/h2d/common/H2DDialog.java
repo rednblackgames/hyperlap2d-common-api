@@ -125,6 +125,11 @@ public class H2DDialog extends VisDialog {
 		hide();
 	}
 
+	@Override
+	public void fadeOut(float time) {
+		close();
+	}
+
 	protected void onDismiss() {
 
 	}

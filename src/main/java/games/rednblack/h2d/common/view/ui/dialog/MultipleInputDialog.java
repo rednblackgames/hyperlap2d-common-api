@@ -10,9 +10,10 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.widget.*;
+import games.rednblack.h2d.common.H2DDialog;
 import games.rednblack.h2d.common.view.ui.listener.MultipleInputDialogListener;
 
-public class MultipleInputDialog extends VisWindow {
+public class MultipleInputDialog extends H2DDialog {
     private MultipleInputDialogListener listener;
     private Array<VisTextField> fields;
     private VisTextButton okButton;
@@ -55,9 +56,9 @@ public class MultipleInputDialog extends VisWindow {
             }
         }
 
-        add(fieldTable).padTop(3).spaceBottom(4);
+        getContentTable().add(fieldTable).padTop(3).spaceBottom(4);
         row();
-        add(buttonBar.createTable()).padBottom(3);
+        getButtonsTable().add(buttonBar.createTable()).padBottom(3);
 
         addListeners();
 
@@ -78,7 +79,7 @@ public class MultipleInputDialog extends VisWindow {
     }
 
     @Override
-    protected void close() {
+    public void close() {
         super.close();
         listener.canceled();
     }

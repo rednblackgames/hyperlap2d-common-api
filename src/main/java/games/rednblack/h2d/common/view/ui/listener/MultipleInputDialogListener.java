@@ -1,9 +1,7 @@
 package games.rednblack.h2d.common.view.ui.listener;
 
-import com.kotcrab.vis.ui.util.dialog.Dialogs;
-
 /**
- * Used to get events from {@link Dialogs} input dialog.
+ * Used to get events from {@link games.rednblack.h2d.common.H2DDialogs} input dialog.
  */
 public interface MultipleInputDialogListener {
     /**

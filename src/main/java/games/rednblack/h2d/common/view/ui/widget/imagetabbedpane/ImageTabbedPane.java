@@ -25,9 +25,9 @@ import com.kotcrab.vis.ui.i18n.BundleText;
 import com.kotcrab.vis.ui.layout.DragPane;
 import com.kotcrab.vis.ui.layout.HorizontalFlowGroup;
 import com.kotcrab.vis.ui.layout.VerticalFlowGroup;
-import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogAdapter;
 import com.kotcrab.vis.ui.widget.*;
+import games.rednblack.h2d.common.H2DDialogs;
 
 /**
  * Modified VisUI TabbedPane to support Images as tab content
@@ -316,8 +316,8 @@ public class ImageTabbedPane {
         }
 
         if (tab.isDirty() && mainTable.getStage() != null) {
-            Dialogs.showOptionDialog(mainTable.getStage(), Text.UNSAVED_DIALOG_TITLE.get(), Text.UNSAVED_DIALOG_TEXT.get(),
-                    Dialogs.OptionDialogType.YES_NO_CANCEL, new OptionDialogAdapter() {
+            H2DDialogs.showOptionDialog(mainTable.getStage(), Text.UNSAVED_DIALOG_TITLE.get(), Text.UNSAVED_DIALOG_TEXT.get(),
+                    H2DDialogs.OptionDialogType.YES_NO_CANCEL, new OptionDialogAdapter() {
                         @Override
                         public void yes () {
                             tab.save();
