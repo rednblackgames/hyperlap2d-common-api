@@ -7,10 +7,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.Pool;
-import com.badlogic.gdx.utils.Pools;
+import com.badlogic.gdx.utils.*;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.highlight.BaseHighlighter;
 import com.kotcrab.vis.ui.util.highlight.Highlight;
@@ -30,6 +27,8 @@ import games.rednblack.h2d.common.util.H2DHighlight;
  * @see Highlighter
  */
 public class H2DHighlightTextArea extends HighlightTextArea {
+    protected PoolManager POOLS = new PoolManager(GlyphLayout::new);
+
     private final Array<Highlight> highlights = new Array<>();
     private final Array<Chunk> renderChunks = new Array<>();
     private boolean chunkUpdateScheduled = true;
@@ -171,7 +170,7 @@ public class H2DHighlightTextArea extends HighlightTextArea {
 
         String text = getText();
 
-        Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
+        Pool<GlyphLayout> layoutPool = POOLS.getPool(GlyphLayout.class);
         GlyphLayout layout = layoutPool.obtain();
         boolean carryHighlight = false;
         for (int lineIdx = 0, highlightIdx = 0; lineIdx < linesBreak.size; lineIdx += 2) {
@@ -303,7 +302,7 @@ public class H2DHighlightTextArea extends HighlightTextArea {
         maxAreaHeight = 0;
         float offsetY = font.getDescent();
         float parentAlpha = font.getColor().a;
-        Pool<GlyphLayout> layoutPool = Pools.get(GlyphLayout.class);
+        Pool<GlyphLayout> layoutPool = POOLS.getPool(GlyphLayout.class);
         GlyphLayout layout = layoutPool.obtain();
 
         if (style.highlightBackground != null) {
