@@ -265,8 +265,12 @@ public class StandardWidgetsFactory {
 	}
 
     public static VisImageButton createImageButton(String style) {
+        return createImageButton(style, true);
+    }
+
+    public static VisImageButton createImageButton(String style, boolean customCursor) {
         VisImageButton button = new VisImageButton(style);
-        button.addListener(new CursorListener(Cursors.FINGER, facade));
+        if (customCursor) button.addListener(new CursorListener(Cursors.FINGER, facade));
         return button;
     }
 
