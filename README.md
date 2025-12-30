@@ -20,7 +20,7 @@ dependencies {
 <dependency>
   <groupId>games.rednblack.hyperlap2d</groupId>
   <artifactId>common-api</artifactId>
-  <version>0.1.6</version>
+  <version>0.1.7</version>
   <type>pom</type>
 </dependency>
 ```
