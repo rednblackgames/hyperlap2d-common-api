@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import games.rednblack.editor.renderer.data.ProjectInfoVO;
+import games.rednblack.editor.renderer.ecs.Engine;
 import games.rednblack.h2d.common.IItemCommand;
 import games.rednblack.h2d.common.factory.IFactory;
 import games.rednblack.h2d.common.view.tools.Tool;
@@ -57,7 +58,7 @@ public interface PluginAPI {
      * Returns Ashley engine of main scene where all entities are located
      * @return Engine
      */
-    com.artemis.World getEngine();
+    Engine getEngine();
 
     /**
      * Get simple libGDX Stage for UI part of editor, to add dialogs or other UI elements and widgets

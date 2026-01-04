@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import games.rednblack.editor.renderer.components.DimensionsComponent;
 import games.rednblack.editor.renderer.components.TransformComponent;
+import games.rednblack.editor.renderer.ecs.Engine;
 import games.rednblack.editor.renderer.utils.ComponentRetriever;
 import games.rednblack.h2d.common.MsgAPI;
 import games.rednblack.puremvc.Facade;
@@ -15,7 +16,7 @@ public class TransformCommandBuilder {
 
     Array<Object> payload;
 
-    public void begin(int forEntity, com.artemis.World engine) {
+    public void begin(int forEntity, Engine engine) {
 
         TransformComponent transformComponent = ComponentRetriever.get(forEntity, TransformComponent.class, engine);
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(forEntity, DimensionsComponent.class, engine);
