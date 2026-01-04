@@ -49,6 +49,8 @@ public class EditorConfigVO {
     public int fpsLimit = 60;
     public boolean useANGLEGLES2 = true;
     public boolean failSafeException = false;
+    public int lastWindowWidth = -1;
+    public int lastWindowHeight = -1;
 
     //Map to store plugin storage
     public Map<String, Map<String, Object>> pluginStorage = new HashMap<>();
