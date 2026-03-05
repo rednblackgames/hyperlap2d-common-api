@@ -86,6 +86,7 @@ public interface PluginAPI {
      */
     TextureAtlas.AtlasRegion getProjectTextureRegion(String regionName);
 
+    String getPackNameFromRegion(String regionName);
 
     /**
      * Adds new sub menu item to the top bar
