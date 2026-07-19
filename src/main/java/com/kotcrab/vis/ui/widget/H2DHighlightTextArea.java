@@ -27,8 +27,6 @@ import games.rednblack.h2d.common.util.H2DHighlight;
  * @see Highlighter
  */
 public class H2DHighlightTextArea extends HighlightTextArea {
-    protected PoolManager POOLS = new PoolManager(GlyphLayout::new);
-
     private final Array<Highlight> highlights = new Array<>();
     private final Array<Chunk> renderChunks = new Array<>();
     private boolean chunkUpdateScheduled = true;
