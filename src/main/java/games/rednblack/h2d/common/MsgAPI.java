@@ -38,6 +38,7 @@ public class MsgAPI {
     public static final String AUTO_SAVE_PROJECT = GLOBAL_PREFIX + ".AUTO_SAVE_PROJECT";
 
     public static final String WINDOW_MAXIMIZED = GLOBAL_PREFIX + ".WINDOW_MAXIMIZED";
+    public static final String WINDOW_TITLE_CHANGED = GLOBAL_PREFIX + ".WINDOW_TITLE_CHANGED";
     public static final String ACTION_FILES_DROPPED = GLOBAL_PREFIX + ".ACTION_DROP";
 
     public static final String SAVE_EDITOR_CONFIG = GLOBAL_PREFIX + ".SAVE_EDITOR_CONFIG";
@@ -202,6 +203,7 @@ public class MsgAPI {
 
     public static final String ITEM_FACTORY_PREFIX = "games.rednblack.editor.factory.ItemFactory";
     public static final String NEW_ITEM_ADDED = ITEM_FACTORY_PREFIX + ".NEW_ITEM_ADDED";
+    public static final String FOLLOWER_REMOVED = GLOBAL_PREFIX + ".FOLLOWER_REMOVED";
     public static final String SCENE_DATA_PREFIX = "games.rednblack.editor.proxy.SceneDataManager";
     public static final String SCENE_LOADED = SCENE_DATA_PREFIX + ".SCENE_LOADED";
 
