@@ -138,6 +138,7 @@ public class MsgAPI {
     public static final String ACTION_RELEASE_SELECTION = SANDBOX_PREFIX + ".ACTION_RELEASE_SELECTION";
     public static final String ACTION_Z_INDEX_CHANGED = SANDBOX_PREFIX + ".ACTION_Z_INDEX_CHANGED";
     public static final String ACTION_SET_Z_INDEX = SANDBOX_PREFIX + ".ACTION_SET_Z_INDEX";
+    public static final String ACTION_SET_ENTITY_Z_INDEX = SANDBOX_PREFIX + ".ACTION_SET_ENTITY_Z_INDEX";
 
     public static final String ACTION_UPDATE_SCENE_DATA = SANDBOX_PREFIX + ".ACTION_UPDATE_SCENE_DATA";
     public static final String ACTION_UPDATE_IMAGE_ITEM_DATA = SANDBOX_PREFIX + ".ACTION_UPDATE_IMAGE_ITEM_DATA";
@@ -216,4 +217,19 @@ public class MsgAPI {
     public static final String ADD_PLUGIN_SETTINGS = GLOBAL_PREFIX + ".ADD_PLUGIN_SETTINGS";
 
     public static final String UPDATE_ATLAS_PACK_LIST = GLOBAL_PREFIX + ".UPDATE_ATLAS_PACK_LIST";
+
+    // Remote operations: editor-core bridge for plugin-driven ops that need access to
+    // editor internals (render thread, ResourceManager, panels). See RemoteOpsMediator.
+    public static final String ACTION_REMOTE_SCREENSHOT = GLOBAL_PREFIX + ".ACTION_REMOTE_SCREENSHOT";
+    public static final String ACTION_REMOTE_LIST_ASSETS = GLOBAL_PREFIX + ".ACTION_REMOTE_LIST_ASSETS";
+    public static final String ACTION_REMOTE_EDIT = GLOBAL_PREFIX + ".ACTION_REMOTE_EDIT";
+    public static final String ACTION_REMOTE_OPEN_SCENE = GLOBAL_PREFIX + ".ACTION_REMOTE_OPEN_SCENE";
+    public static final String ACTION_REMOTE_DELETE = GLOBAL_PREFIX + ".ACTION_REMOTE_DELETE";
+    public static final String ACTION_REMOTE_TYPE_NAMES = GLOBAL_PREFIX + ".ACTION_REMOTE_TYPE_NAMES";
+    public static final String ACTION_REMOTE_SCENE_SETTINGS = GLOBAL_PREFIX + ".ACTION_REMOTE_SCENE_SETTINGS";
+    public static final String ACTION_REMOTE_CREATE_ENTITY = GLOBAL_PREFIX + ".ACTION_REMOTE_CREATE_ENTITY";
+    public static final String ACTION_REMOTE_EDITABLE_COMPONENTS = GLOBAL_PREFIX + ".ACTION_REMOTE_EDITABLE_COMPONENTS";
+    public static final String ACTION_REMOTE_CREATE_SHADER = GLOBAL_PREFIX + ".ACTION_REMOTE_CREATE_SHADER";
+    public static final String ACTION_REMOTE_ASSET_DIMENSIONS = GLOBAL_PREFIX + ".ACTION_REMOTE_ASSET_DIMENSIONS";
+    public static final String ACTION_REMOTE_SET_Z_INDEX = GLOBAL_PREFIX + ".ACTION_REMOTE_SET_Z_INDEX";
 }
