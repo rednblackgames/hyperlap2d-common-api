@@ -14,6 +14,14 @@ public class RemoteCreateEntityRequest {
     public String fontFamily;                      // label
     public int fontSize = 20;                      // label
     public String lightType;                       // light: "POINT" or "CONE"
+    /**
+     * Optional: the uniqueId of a composite entity to create INSIDE (as a child). When set,
+     * (x, y) are in the composite's local coordinate space. The composite must be a direct child
+     * of the current viewing entity (the scene root, or the composite currently being edited);
+     * to target a nested composite, enter its container in the editor first. When null/empty the
+     * entity is created at the current viewing entity (normally the scene root).
+     */
+    public String parentUniqueId;
 
     public RemoteHandle<RemoteCreateEntityResult> handle;
 }
