@@ -6,7 +6,7 @@ package games.rednblack.h2d.common.remote;
  * by the editor-core RemoteOpsMediator.
  */
 public class RemoteScreenshotRequest {
-    public enum Mode { WHOLE, VIEW, REGION }
+    public enum Mode { WHOLE, REGION }
 
     public Mode mode = Mode.WHOLE;
     /** World-space rectangle, used only for {@link Mode#REGION}. */
