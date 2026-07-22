@@ -22,6 +22,12 @@ public class RemoteCreateEntityRequest {
      * entity is created at the current viewing entity (normally the scene root).
      */
     public String parentUniqueId;
+    /**
+     * Optional: the layer name to create the entity on (resolved case-insensitively against the
+     * effective parent's layers; layer names are otherwise case-sensitive in the editor). When
+     * null/empty the entity is created on the currently selected layer.
+     */
+    public String layer;
 
     public RemoteHandle<RemoteCreateEntityResult> handle;
 }
