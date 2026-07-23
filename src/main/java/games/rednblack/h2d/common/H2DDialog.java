@@ -53,7 +53,7 @@ public class H2DDialog extends VisDialog {
 
     private void init(boolean scrollFocus) {
 		skin = VisUI.getSkin();
-		padTop(32);
+		padTop(36);
 		if (scrollFocus) {
 			addListener(new InputListener() {
 				@Override
@@ -104,7 +104,7 @@ public class H2DDialog extends VisDialog {
 	@Override
 	public void addCloseButton() {
 		VisImageButton closeButton = new VisImageButton("close-window");
-		this.getTitleTable().add(closeButton).padRight(0);
+		this.getTitleTable().add(closeButton).padRight(0).padTop(2);
 		closeButton.addListener(new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
