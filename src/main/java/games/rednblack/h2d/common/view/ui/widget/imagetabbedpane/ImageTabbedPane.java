@@ -628,17 +628,23 @@ public class ImageTabbedPane {
                 int buttonsSize = group.getButtons().size;
                 float availableSpace = mainTable.getWidth();
 
-                int maxLineElements = (int) Math.ceil(availableSpace / (button.getWidth() + style.tabPadding));
+                // Each tab cell carries a leading tabSpacing (padLeft in the constructor), so its real
+                // footprint is button + tabPadding + tabSpacing. Leaving tabSpacing out of the math makes
+                // the row overflow by buttonsSize * tabSpacing, wrapping the last tab even when it fits.
+                float perTab = style.tabPadding + style.tabSpacing;
+                int maxLineElements = (int) Math.ceil(availableSpace / (button.getWidth() + perTab));
+                // 1px slack so floating point rounding of the summed widths can never exceed the row width.
+                float budget = availableSpace - 1f;
 
                 if (buttonsSize <= maxLineElements) {
-                    float cellWidth = (availableSpace - style.tabPadding * buttonsSize) / buttonsSize;
+                    float cellWidth = (budget - perTab * buttonsSize) / buttonsSize;
                     cellButton.width(cellWidth + style.tabPadding);
                 } else {
                     int linesNeeded = (int) Math.ceil((double) (buttonsSize) / maxLineElements) - 1;
                     int line = index / maxLineElements;
 
                     int buttonsOnLine = buttonsSize % maxLineElements == 0 ? maxLineElements : line != linesNeeded ? maxLineElements : buttonsSize % maxLineElements;
-                    float cellWidth = (availableSpace - style.tabPadding * buttonsOnLine) / buttonsOnLine;
+                    float cellWidth = (budget - perTab * buttonsOnLine) / buttonsOnLine;
                     cellButton.width(cellWidth + style.tabPadding);
                 }
                 invalidateHierarchy();
