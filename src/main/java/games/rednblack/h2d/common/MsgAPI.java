@@ -139,6 +139,8 @@ public class MsgAPI {
     public static final String ACTION_Z_INDEX_CHANGED = SANDBOX_PREFIX + ".ACTION_Z_INDEX_CHANGED";
     public static final String ACTION_SET_Z_INDEX = SANDBOX_PREFIX + ".ACTION_SET_Z_INDEX";
     public static final String ACTION_SET_ENTITY_Z_INDEX = SANDBOX_PREFIX + ".ACTION_SET_ENTITY_Z_INDEX";
+    /** Reorders z-index of a set of same-layer siblings; body is an Array&lt;String&gt; of entity ids in z-ascending order. */
+    public static final String ACTION_REORDER_Z_INDEX = SANDBOX_PREFIX + ".ACTION_REORDER_Z_INDEX";
     public static final String ACTION_SET_ENTITY_LAYER = SANDBOX_PREFIX + ".ACTION_SET_ENTITY_LAYER";
 
     public static final String ACTION_UPDATE_SCENE_DATA = SANDBOX_PREFIX + ".ACTION_UPDATE_SCENE_DATA";
