@@ -469,6 +469,16 @@ public class PropertyGrid {
         return this;
     }
 
+    /**
+     * A widget spanning the grid and taking every pixel left, across and down. For the list that
+     * makes up the body of a dialog, under the form that adds to it.
+     */
+    public PropertyGrid wideGrow(Actor actor) {
+        openRow();
+        table.add(actor).colspan(2).grow().minWidth(0).padLeft(CONTENT_PAD).padRight(CONTENT_PAD);
+        return this;
+    }
+
     /** A widget spanning and filling the whole grid, at a fixed height. */
     public PropertyGrid wideFill(Actor actor, int height) {
         openRow();
