@@ -29,6 +29,9 @@ import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 
 public class H2DDialog extends VisDialog {
+	/** Dim drawn over the stage behind a modal dialog, matching the editor's own black overlay. */
+	private static final String STAGE_DIM = "dialogDim";
+
     protected Skin skin;
 
 	static public final Interpolation.SwingOut swingOut = new Interpolation.SwingOut(1.1f);
@@ -62,6 +65,22 @@ public class H2DDialog extends VisDialog {
 				}
 			});
 		}
+	}
+
+	/**
+	 * Dims the stage behind the dialog while it is modal, so it reads as blocking the editor the same
+	 * way the black overlay does while a native dialog is up. Called by libGDX during construction,
+	 * which starts every dialog modal, and again by whatever turns modality off.
+	 * <p>
+	 * The style is copied first: the instance the skin hands out is shared by every window using it,
+	 * so setting the stage background on it would dim panels too.
+	 */
+	@Override
+	public void setModal (boolean isModal) {
+		super.setModal(isModal);
+		WindowStyle style = new WindowStyle(getStyle());
+		style.stageBackground = isModal ? VisUI.getSkin().getDrawable(STAGE_DIM) : null;
+		setStyle(style);
 	}
 
 	@Override

@@ -65,6 +65,8 @@ public class PropertyGrid {
     public static final int CONTENT_PAD = 8;
     /** Live value shown next to a slider, e.g. "1.2x" or "Unlimited". */
     public static final int VALUE_WIDTH = 60;
+    /** A field holding a number rather than text: sized for its digits, not for the column. */
+    public static final int NUMBER_WIDTH = 64;
     /** Vertical rhythm. */
     public static final int ROW_PAD = 5;
     public static final int SECTION_PAD_TOP = 10;
@@ -94,6 +96,9 @@ public class PropertyGrid {
     private boolean firstRow;
     private int labelColumnWidth;
     private int minLabelWidth;
+    /** The name and the widget of the row added last, for {@link #tooltipLastRow(String)}. */
+    private VisLabel lastLabel;
+    private Actor lastField;
     private String labelStyle = LABEL_STYLE;
     private String sectionStyle = SECTION_STYLE;
     private int labelWidthCap = LABEL_WIDTH;
@@ -198,6 +203,7 @@ public class PropertyGrid {
      * leftwards up to the longest label instead of leaving a gap in the middle of the panel.
      */
     private <T extends Actor> Cell<T> fieldCell(Cell<T> cell) {
+        lastField = cell.getActor();
         return cell.growX().minWidth(0).prefWidth(FIELD_WIDTH).left().padRight(CONTENT_PAD);
     }
 
@@ -333,21 +339,18 @@ public class PropertyGrid {
     public PropertyGrid rowCompact(String label, Actor field) {
         openRow();
         addLabel(label);
+        lastField = field;
         table.add(field).left().padRight(CONTENT_PAD);
         return this;
     }
 
     /**
-     * {@link #rowCompact(String, Actor)} with a tooltip on both its name and its widget, for a
-     * property whose meaning is worth a sentence.
+     * Puts a tooltip on the row just added, covering both its name and its widget, for a property
+     * whose meaning is worth a sentence.
      */
-    public PropertyGrid rowCompact(String label, Actor field, String tooltip) {
-        openRow();
-        VisLabel name = gridLabel(label);
-        addLabel(name);
-        table.add(field).left().padRight(CONTENT_PAD);
-        StandardWidgetsFactory.addTooltip(name, tooltip);
-        StandardWidgetsFactory.addTooltip(field, tooltip);
+    public PropertyGrid tooltipLastRow(String tooltip) {
+        if (lastLabel != null) StandardWidgetsFactory.addTooltip(lastLabel, tooltip);
+        if (lastField != null) StandardWidgetsFactory.addTooltip(lastField, tooltip);
         return this;
     }
 
@@ -358,6 +361,7 @@ public class PropertyGrid {
     public PropertyGrid toggle(String label, Actor toggle) {
         openRow();
         addLabel(label);
+        lastField = toggle;
         table.add(toggle).expandX().right().padRight(CONTENT_PAD);
         return this;
     }
@@ -420,6 +424,21 @@ public class PropertyGrid {
      */
     private static <T extends Actor> Cell<T> togglePart(Cell<T> cell) {
         return cell.expandX().minWidth(0).prefWidth(HALF_FIELD_WIDTH).left();
+    }
+
+    /**
+     * Label, a number field of its own width, and the unit the number is measured in. For the "1920
+     * px" kind of row, where stretching the field across the column would say nothing.
+     */
+    public PropertyGrid rowUnit(String label, Actor field, String unit) {
+        openRow();
+        addLabel(label);
+        VisTable row = new VisTable();
+        row.add(field).width(NUMBER_WIDTH).height(FIELD_HEIGHT).fill();
+        row.add(gridText(unit)).padLeft(LABEL_GAP);
+        lastField = row;
+        table.add(row).left().padRight(CONTENT_PAD);
+        return this;
     }
 
     /** Label plus two narrow fields, each with its own inline label. */
@@ -600,6 +619,7 @@ public class PropertyGrid {
     }
 
     private void addLabel(VisLabel label) {
+        lastLabel = label;
         table.add(label).minWidth(trackLabelWidth(label)).maxWidth(labelWidthCap).left()
                 .padLeft(CONTENT_PAD).padRight(LABEL_GAP);
     }

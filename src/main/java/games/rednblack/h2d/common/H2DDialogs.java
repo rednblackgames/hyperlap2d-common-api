@@ -9,6 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.CharArray;
 import com.badlogic.gdx.utils.I18NBundle;
 import com.kotcrab.vis.ui.Locales;
@@ -23,6 +26,8 @@ import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.kotcrab.vis.ui.util.dialog.OptionDialogListener;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.ButtonBar.ButtonType;
+import games.rednblack.h2d.common.view.ui.FormRow;
+import games.rednblack.h2d.common.view.ui.StandardWidgetsFactory;
 
 /**
  * Utilities for displaying various type of dialogs. Equivalent of JOptionPane from Swing.
@@ -33,15 +38,76 @@ public class H2DDialogs {
     private static final int BUTTON_OK = 1;
     private static final int BUTTON_DETAILS = 2;
 
+    /** Shared metrics, so every dialog of this class is padded and spaced the same. */
+    private static final int CONTENT_PAD = 16;
+    private static final int BUTTON_ROW_PAD = 12;
+    private static final int BUTTON_GAP = 8;
+    private static final int BUTTON_MIN_WIDTH = 82;
+    /** A message narrower than this still gets a dialog worth looking at, wider than that it wraps. */
+    private static final int MESSAGE_MIN_WIDTH = 280;
+    private static final int MESSAGE_MAX_WIDTH = 420;
+    /** Style of the button that carries out what the dialog is asking about. */
+    private static final String ACCENT_BUTTON = "accent";
+
+    /**
+     * The message of a dialog: white, and wrapped once it grows past {@link #MESSAGE_MAX_WIDTH} so a
+     * long sentence makes the dialog taller rather than stretching it across the screen.
+     */
+    private static VisLabel message(String text, int alignment) {
+        VisLabel label = new VisLabel(text, alignment);
+        label.setWrap(true);
+        return label;
+    }
+
+    /** Adds a message to a dialog's content, sized between the two message widths. */
+    private static Cell<VisLabel> addMessage(VisDialog dialog, String text, int alignment) {
+        VisLabel label = new VisLabel(text, alignment);
+        // measured before wrapping is turned on: a wrapped label reports no preferred width at all
+        float natural = label.getPrefWidth();
+        label.setWrap(true);
+        return dialog.getContentTable().add(label)
+                .width(Math.max(MESSAGE_MIN_WIDTH, Math.min(natural, MESSAGE_MAX_WIDTH)))
+                .pad(CONTENT_PAD);
+    }
+
+    /** Gives a row of dialog buttons the widths and gaps the rest of the editor uses. */
+    private static <T extends Table> T layoutButtons(T buttons) {
+        Array<Cell> cells = buttons.getCells();
+        for (int i = 0; i < cells.size; i++) {
+            cells.get(i).minWidth(BUTTON_MIN_WIDTH).padLeft(i == 0 ? 0 : BUTTON_GAP);
+        }
+        return buttons;
+    }
+
+    /** Accents the button added last, which is the affirmative one in the dialogs built here. */
+    private static void accentLastButton(VisDialog dialog) {
+        Array<Cell> cells = dialog.getButtonsTable().getCells();
+        if (cells.isEmpty()) return;
+        Actor actor = cells.peek().getActor();
+        if (actor instanceof Button) accent((Button) actor);
+    }
+
+    /** Marks a button as the one that carries out the dialog's action. */
+    private static void accent(Button button) {
+        if (button instanceof VisTextButton) {
+            ((VisTextButton) button).setStyle(
+                    VisUI.getSkin().get(ACCENT_BUTTON, VisTextButton.VisTextButtonStyle.class));
+        }
+    }
+
     /**
      * Dialog with given text and single OK button.
      * @param title dialog title
      */
     public static VisDialog showOKDialog (Stage stage, String title, String text) {
-        final VisDialog dialog = new VisDialog(title);
+        final VisDialog dialog = new H2DDialog(title);
         dialog.closeOnEscape();
-        dialog.text(text);
-        dialog.button(ButtonType.OK.getText()).padBottom(3);
+        addMessage(dialog, text, Align.center);
+        dialog.getContentTable().row();
+        dialog.button(ButtonType.OK.getText());
+        accentLastButton(dialog);
+        layoutButtons(dialog.getButtonsTable());
+        dialog.getCell(dialog.getButtonsTable()).pad(BUTTON_ROW_PAD).padTop(0);
         dialog.pack();
         dialog.centerWindow();
         dialog.addListener(new InputListener() {
@@ -236,21 +302,22 @@ public class H2DDialogs {
             buttonBar.setIgnoreSpacing(true);
             buttonBar.setButton(ButtonType.CANCEL, cancelButton = new VisTextButton(ButtonType.CANCEL.getText()));
             buttonBar.setButton(ButtonType.OK, okButton = new VisTextButton(ButtonType.OK.getText()));
-
-            VisTable fieldTable = new VisTable(true);
+            accent(okButton);
 
             if (validator == null)
-                field = new VisTextField();
+                field = StandardWidgetsFactory.createTextField();
             else
-                field = new VisValidatableTextField(validator);
+                field = StandardWidgetsFactory.createValidableTextField(validator);
 
-            if (fieldTitle != null) fieldTable.add(new VisLabel(fieldTitle));
+            // name and field on one line, the way every form in the editor reads
+            FormRow fieldRow = new FormRow();
+            if (fieldTitle != null) fieldRow.label(fieldTitle);
+            fieldRow.field(field);
 
-            fieldTable.add(field).expand().fill();
-
-            getContentTable().add(fieldTable).padTop(3).spaceBottom(4);
+            getContentTable().add(fieldRow).growX().pad(CONTENT_PAD);
             row();
-            getButtonsTable().add(buttonBar.createTable()).padBottom(3);
+            getButtonsTable().add(layoutButtons(buttonBar.createTable()));
+            getCell(getButtonsTable()).pad(BUTTON_ROW_PAD).padTop(0);
 
             addListeners();
 
@@ -347,10 +414,8 @@ public class H2DDialogs {
             super(title);
 
             setModal(true);
-            getContentTable().add(new VisLabel(text, Align.center));
+            addMessage(this, text, Align.center);
             getContentTable().row();
-            defaults().space(6);
-            defaults().padBottom(3);
 
             buttonBar = new ButtonBar();
             buttonBar.setIgnoreSpacing(true);
@@ -395,7 +460,9 @@ public class H2DDialogs {
                     break;
             }
 
-            getButtonsTable().add(buttonBar.createTable());
+            accent(buttonBar.getTextButton(ButtonType.YES));
+            getButtonsTable().add(layoutButtons(buttonBar.createTable()));
+            getCell(getButtonsTable()).pad(BUTTON_ROW_PAD).padTop(0);
 
             pack();
             centerWindow();
@@ -435,7 +502,8 @@ public class H2DDialogs {
         public DetailsDialog (String text, String title, String details) {
             super(title);
 
-            text(text);
+            addMessage(this, text, Align.left);
+            getContentTable().row();
 
             if (details != null) {
                 copyButton = new VisTextButton(Text.COPY.get());
@@ -465,7 +533,10 @@ public class H2DDialogs {
                 button(Text.DETAILS.get(), BUTTON_DETAILS);
             }
 
-            button(ButtonType.OK.getText(), BUTTON_OK).padBottom(3);
+            button(ButtonType.OK.getText(), BUTTON_OK);
+            accentLastButton(this);
+            layoutButtons(getButtonsTable());
+            getCell(getButtonsTable()).pad(BUTTON_ROW_PAD).padTop(0);
             pack();
             centerWindow();
         }
@@ -541,14 +612,15 @@ public class H2DDialogs {
 
             this.listener = listener;
 
-            text(new VisLabel(text, Align.center));
-            defaults().padBottom(3);
+            addMessage(this, text, Align.center);
+            getContentTable().row();
 
             for (int i = 0; i < buttons.length; i++) {
                 button(buttons[i], returns[i]);
             }
+            layoutButtons(getButtonsTable());
+            getCell(getButtonsTable()).pad(BUTTON_ROW_PAD).padTop(0);
 
-            padBottom(3);
             pack();
             centerWindow();
         }
