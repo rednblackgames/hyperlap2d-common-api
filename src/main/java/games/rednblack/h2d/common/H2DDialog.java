@@ -32,6 +32,8 @@ public class H2DDialog extends VisDialog {
 	/** Dim drawn over the stage behind a modal dialog, matching the editor's own black overlay. */
 	private static final String STAGE_DIM = "dialogDim";
 
+	private float fadeOutDelay = 0;
+
     protected Skin skin;
 
 	static public final Interpolation.SwingOut swingOut = new Interpolation.SwingOut(1.1f);
@@ -86,6 +88,7 @@ public class H2DDialog extends VisDialog {
 	@Override
 	public void hide () {
 		super.hide(Actions.sequence(
+				Actions.delay(fadeOutDelay),
 				Actions.parallel(
 					Actions.scaleTo(0.8f, 0.8f, FADE_TIME, Interpolation.pow5Out),
 					Actions.alpha(0, FADE_TIME, Interpolation.pow3In),
@@ -153,4 +156,7 @@ public class H2DDialog extends VisDialog {
 
 	}
 
+	protected void setFadeOutDelay(float fadeOutDelay) {
+		this.fadeOutDelay = fadeOutDelay;
+	}
 }
