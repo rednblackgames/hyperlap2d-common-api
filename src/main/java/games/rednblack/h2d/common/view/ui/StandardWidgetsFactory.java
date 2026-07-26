@@ -262,6 +262,11 @@ public class StandardWidgetsFactory {
         return scrollPane;
     }
 
+    /** Marks an actor as clickable by giving it the pointing cursor, like the buttons have. */
+    public static void addFingerCursor(Actor actor) {
+        actor.addListener(new CursorListener(Cursors.FINGER, facade));
+    }
+
     public static H2DTextTooltip addTooltip(Actor actor, String text) {
         H2DTooltipManager.getInstance().hideAll();
 

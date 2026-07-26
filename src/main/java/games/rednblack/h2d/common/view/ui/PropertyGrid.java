@@ -78,11 +78,12 @@ public class PropertyGrid {
     public static final int CONSTRAINT_GAP = 2;
     public static final int CONSTRAINT_ROW_PAD = 2;
 
-    private static final String LABEL_STYLE = "property-label";
-    private static final String SECTION_STYLE = "property-section";
+    /** Label styles of the design: grey names, white values, compact font and dialog font. */
+    public static final String LABEL_STYLE = "property-label";
+    public static final String SECTION_STYLE = "property-section";
     /** Dialog scale, see {@link #dialogScale()}: same colours, the editor's default font. */
-    private static final String LABEL_STYLE_LARGE = "property-label-large";
-    private static final String SECTION_STYLE_LARGE = "property-section-large";
+    public static final String LABEL_STYLE_LARGE = "property-label-large";
+    public static final String SECTION_STYLE_LARGE = "property-section-large";
     /** Widest the label column may get at the dialog scale, where the labels are set in a bigger font. */
     public static final int DIALOG_LABEL_WIDTH = 170;
     public static final int DIALOG_ROW_PAD = 9;
@@ -457,6 +458,17 @@ public class PropertyGrid {
         return this;
     }
 
+    /**
+     * A widget spanning and filling the whole grid, keeping its own preferred width. Unlike
+     * {@link #wideFill(Actor)} it lets its content decide how wide the panel has to be, which is what
+     * a dialog wants: the property box instead has a fixed width that nothing may push.
+     */
+    public PropertyGrid wideContent(Actor actor) {
+        openRow();
+        table.add(actor).colspan(2).fillX().minWidth(0).padLeft(CONTENT_PAD).padRight(CONTENT_PAD);
+        return this;
+    }
+
     /** A widget spanning and filling the whole grid, at a fixed height. */
     public PropertyGrid wideFill(Actor actor, int height) {
         openRow();
@@ -577,7 +589,7 @@ public class PropertyGrid {
     }
 
     /** Falls back to the plain small label style when a panel runs against a skin without ours. */
-    private static String style(String style) {
+    public static String style(String style) {
         return VisUI.getSkin().has(style, Label.LabelStyle.class) ? style : "small";
     }
 
