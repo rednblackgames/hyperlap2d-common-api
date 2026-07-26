@@ -189,6 +189,22 @@ public class StandardWidgetsFactory {
         return visCheckBox;
     }
 
+    /** Pill switch for boolean properties. Its name goes in the label column, so it carries no text. */
+    public static VisCheckBox createSwitch() {
+        return createSwitch("");
+    }
+
+    /** Pill switch carrying its own trailing label, for rows where the label column is taken. */
+    public static VisCheckBox createSwitch(String text) {
+        VisCheckBox visCheckBox = new VisCheckBox(text, "switch");
+        visCheckBox.setFocusBorderEnabled(false);
+        // Stay left aligned even when a cell hands the switch more width than it needs.
+        visCheckBox.left();
+        if (text.isEmpty()) visCheckBox.getLabelCell().padLeft(0);
+        visCheckBox.addListener(new CursorListener(Cursors.FINGER, facade));
+        return visCheckBox;
+    }
+
     public static <T> VisSelectBox<T> createSelectBox(Class<T> type) {
         return createSelectBox("default", type);
     }
@@ -219,10 +235,9 @@ public class StandardWidgetsFactory {
                 if (visSelectBox.getScrollPane().hasParent()) {
                     visSelectBox.hideScrollPane();
                 } else {
+                    // showScrollPane() already right aligns the list with the box when it would run
+                    // off the stage; shifting it again here moved it a whole list width too far left.
                     visSelectBox.showScrollPane();
-                    if (visSelectBox.getScrollPane().getWidth() > visSelectBox.getWidth()) {
-                        visSelectBox.getScrollPane().setX(visSelectBox.getScrollPane().getX() + (visSelectBox.getWidth() - visSelectBox.getScrollPane().getWidth()));
-                    }
                 }
                 return true;
             }
