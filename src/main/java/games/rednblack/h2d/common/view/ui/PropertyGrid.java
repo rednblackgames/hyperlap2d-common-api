@@ -63,6 +63,8 @@ public class PropertyGrid {
      * rather than running flush to the panel edges.
      */
     public static final int CONTENT_PAD = 8;
+    /** Live value shown next to a slider, e.g. "1.2x" or "Unlimited". */
+    public static final int VALUE_WIDTH = 60;
     /** Vertical rhythm. */
     public static final int ROW_PAD = 5;
     public static final int SECTION_PAD_TOP = 10;
@@ -78,17 +80,56 @@ public class PropertyGrid {
 
     private static final String LABEL_STYLE = "property-label";
     private static final String SECTION_STYLE = "property-section";
+    /** Dialog scale, see {@link #dialogScale()}: same colours, the editor's default font. */
+    private static final String LABEL_STYLE_LARGE = "property-label-large";
+    private static final String SECTION_STYLE_LARGE = "property-section-large";
+    /** Widest the label column may get at the dialog scale, where the labels are set in a bigger font. */
+    public static final int DIALOG_LABEL_WIDTH = 170;
+    public static final int DIALOG_ROW_PAD = 9;
+    public static final int DIALOG_SECTION_PAD_TOP = 14;
+    public static final int DIALOG_SECTION_PAD_BOTTOM = 9;
 
     private final VisTable table;
     private boolean firstRow;
     private int labelColumnWidth;
     private int minLabelWidth;
+    private String labelStyle = LABEL_STYLE;
+    private String sectionStyle = SECTION_STYLE;
+    private int labelWidthCap = LABEL_WIDTH;
+    private int rowPad = ROW_PAD;
+    private int sectionPadTop = SECTION_PAD_TOP;
+    private int sectionPadBottom = SECTION_PAD_BOTTOM;
 
     public PropertyGrid(VisTable table) {
         this.table = table;
-        this.firstRow = table.getCells().size == 0;
         // Rows start at the left edge of the panel, under the section titles.
         table.left();
+        boolean empty = table.getCells().size == 0;
+        if (empty) {
+            // Zero sized cell keeping the field column expandable, so a grid whose rows happen to be
+            // all full width or all compact still fills its container instead of shrinking to the
+            // width of its widest row. Without it such a grid collapses (labels ellipsize, full width
+            // rows stop at their content) because no column of it would ever claim the spare width.
+            table.add();
+            table.add().expandX();
+            table.row();
+        }
+        this.firstRow = empty;
+    }
+
+    /**
+     * Switches the grid to the dialog scale: the editor's default font instead of the compact one,
+     * a wider label column and more air between rows. For the settings dialog and friends, which
+     * have far more room than the property box.
+     */
+    public PropertyGrid dialogScale() {
+        labelStyle = LABEL_STYLE_LARGE;
+        sectionStyle = SECTION_STYLE_LARGE;
+        labelWidthCap = DIALOG_LABEL_WIDTH;
+        rowPad = DIALOG_ROW_PAD;
+        sectionPadTop = DIALOG_SECTION_PAD_TOP;
+        sectionPadBottom = DIALOG_SECTION_PAD_BOTTOM;
+        return this;
     }
 
     public static PropertyGrid on(VisTable table) {
@@ -156,7 +197,7 @@ public class PropertyGrid {
      * leftwards up to the longest label instead of leaving a gap in the middle of the panel.
      */
     private <T extends Actor> Cell<T> fieldCell(Cell<T> cell) {
-        return cell.growX().minWidth(0).prefWidth(FIELD_WIDTH).padRight(CONTENT_PAD);
+        return cell.growX().minWidth(0).prefWidth(FIELD_WIDTH).left().padRight(CONTENT_PAD);
     }
 
     /** One of the narrow fields of a paired or tripled row, growing with the column around it. */
@@ -186,6 +227,11 @@ public class PropertyGrid {
 
     /** Inline label of a paired field, e.g. the "X" of "Position X Y". Kept to a letter or two. */
     public static VisLabel subLabel(String text) {
+        return StandardWidgetsFactory.createLabel(text, style(LABEL_STYLE), Align.left);
+    }
+
+    /** Plain left aligned text, no trailing colon: a sentence rather than a field name. */
+    public static VisLabel text(String text) {
         return StandardWidgetsFactory.createLabel(text, style(LABEL_STYLE), Align.left);
     }
 
@@ -221,6 +267,28 @@ public class PropertyGrid {
         return StandardWidgetsFactory.createLabel(title, style(SECTION_STYLE), Align.left);
     }
 
+    /** Read only value at this grid's scale, for values a panel builds itself (slider readouts). */
+    public VisLabel valueLabel(String text) {
+        return StandardWidgetsFactory.createLabel(text, style(sectionStyle), Align.left);
+    }
+
+    /** {@link #valueLabel(String)} that ellipsizes instead of growing, for paths and other user data. */
+    public VisLabel valueLabelEllipsized(String text) {
+        return ellipsized(valueLabel(text));
+    }
+
+    private VisLabel gridLabel(String text) {
+        return ellipsized(StandardWidgetsFactory.createLabel(withColon(text), style(labelStyle), Align.left));
+    }
+
+    private VisLabel gridText(String text) {
+        return StandardWidgetsFactory.createLabel(text, style(labelStyle), Align.left);
+    }
+
+    private VisLabel gridSectionLabel(String title) {
+        return StandardWidgetsFactory.createLabel(title, style(sectionStyle), Align.left);
+    }
+
     // ---- rows ----
 
     /**
@@ -233,16 +301,16 @@ public class PropertyGrid {
 
     public PropertyGrid section(String title, Actor trailing) {
         if (!firstRow) {
-            table.row().padTop(SECTION_PAD_TOP);
+            table.row().padTop(sectionPadTop);
         }
         VisTable head = new VisTable();
-        head.add(sectionLabel(title)).left().padRight(LABEL_GAP);
+        head.add(gridSectionLabel(title)).left().padRight(LABEL_GAP);
         elastic(head.add(new Separator("menu"))).height(2).padRight(trailing == null ? 0 : LABEL_GAP);
         if (trailing != null) {
             head.add(trailing).right();
         }
         fullBleedCell(table.add(head));
-        table.row().padTop(SECTION_PAD_BOTTOM);
+        table.row().padTop(sectionPadBottom);
         firstRow = true; // the section rule already spaces the row that follows
         return this;
     }
@@ -271,6 +339,42 @@ public class PropertyGrid {
         openRow();
         addLabel(label);
         table.add(toggle).expandX().right().padRight(CONTENT_PAD);
+        return this;
+    }
+
+    /**
+     * A boolean whose name is a sentence rather than a field name, as in the settings pages: the text
+     * takes the whole row and the switch is pinned to the right edge of the content.
+     */
+    public PropertyGrid toggleWide(String text, Actor toggle) {
+        return toggleWide(text, toggle, null);
+    }
+
+    /** {@link #toggleWide(String, Actor)} with a tooltip covering both the text and the switch. */
+    public PropertyGrid toggleWide(String text, Actor toggle, String tooltip) {
+        openRow();
+        // The sentence keeps its natural width so it cannot collapse under the switch, and shrinks
+        // with an ellipsis rather than drawing over it when the container is too narrow.
+        VisLabel label = ellipsized(gridText(text));
+        VisTable row = new VisTable();
+        row.add(label).growX().minWidth(0).left();
+        row.add(toggle).right();
+        wideCell(table.add(row));
+        if (tooltip != null) {
+            StandardWidgetsFactory.addTooltip(label, tooltip);
+            StandardWidgetsFactory.addTooltip(toggle, tooltip);
+        }
+        return this;
+    }
+
+    /** Label, a slider filling the field column, and the live value it is showing. */
+    public PropertyGrid sliderRow(String label, Actor slider, Actor value) {
+        openRow();
+        addLabel(label);
+        VisTable row = new VisTable();
+        elastic(row.add(slider));
+        row.add(value).width(VALUE_WIDTH).right().padLeft(LABEL_GAP);
+        fieldCell(table.add(row));
         return this;
     }
 
@@ -312,7 +416,7 @@ public class PropertyGrid {
      */
     public PropertyGrid pair(Actor leading, String labelA, Actor fieldA, String labelB, Actor fieldB) {
         openRow();
-        table.add(leading).minWidth(trackLabelWidth(leading)).maxWidth(LABEL_WIDTH).fillX().left()
+        table.add(leading).minWidth(trackLabelWidth(leading)).maxWidth(labelWidthCap).fillX().left()
                 .padLeft(CONTENT_PAD).padRight(LABEL_GAP);
         addPair(labelA, fieldA, labelB, fieldB);
         return this;
@@ -428,14 +532,14 @@ public class PropertyGrid {
             table.row();
         }
         // addSeparator() pads itself and opens the next row, so set the spacing on the cell.
-        table.addSeparator().colspan(2).padTop(SECTION_PAD_TOP).padBottom(0);
-        table.row().padTop(SECTION_PAD_BOTTOM);
+        table.addSeparator().colspan(2).padTop(sectionPadTop).padBottom(0);
+        table.row().padTop(sectionPadBottom);
         firstRow = true;
         return this;
     }
 
     private void openRow() {
-        openRow(ROW_PAD);
+        openRow(rowPad);
     }
 
     private void openRow(int padTop) {
@@ -451,8 +555,8 @@ public class PropertyGrid {
      * never the label, otherwise the text would ellipsize while there is still room next to it.
      */
     private void addLabel(String text) {
-        VisLabel label = label(text);
-        table.add(label).minWidth(trackLabelWidth(label)).maxWidth(LABEL_WIDTH).left()
+        VisLabel label = gridLabel(text);
+        table.add(label).minWidth(trackLabelWidth(label)).maxWidth(labelWidthCap).left()
                 .padLeft(CONTENT_PAD).padRight(LABEL_GAP);
     }
 
@@ -462,8 +566,8 @@ public class PropertyGrid {
      */
     private int trackLabelWidth(Actor label) {
         int width = label instanceof Layout ? (int) Math.ceil(((Layout) label).getPrefWidth()) : 0;
-        labelColumnWidth = Math.max(labelColumnWidth, Math.min(width, LABEL_WIDTH));
-        return Math.max(Math.min(width, LABEL_WIDTH), minLabelWidth);
+        labelColumnWidth = Math.max(labelColumnWidth, Math.min(width, labelWidthCap));
+        return Math.max(Math.min(width, labelWidthCap), minLabelWidth);
     }
 
     private static String withColon(String text) {
