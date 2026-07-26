@@ -324,11 +324,30 @@ public class PropertyGrid {
         return this;
     }
 
-    /** Label plus a widget keeping its own size: switches, tint buttons, short read only values. */
+    /**
+     * Label plus a widget keeping its own size: switches, tint buttons, read only values, or a group
+     * of small buttons. The widget is not capped, so a group wider than {@link #FIELD_WIDTH} is not
+     * clipped: what keeps unbounded content from widening a panel is the ellipsis on its label, not a
+     * cap here.
+     */
     public PropertyGrid rowCompact(String label, Actor field) {
         openRow();
         addLabel(label);
-        table.add(field).maxWidth(FIELD_WIDTH).left().padRight(CONTENT_PAD);
+        table.add(field).left().padRight(CONTENT_PAD);
+        return this;
+    }
+
+    /**
+     * {@link #rowCompact(String, Actor)} with a tooltip on both its name and its widget, for a
+     * property whose meaning is worth a sentence.
+     */
+    public PropertyGrid rowCompact(String label, Actor field, String tooltip) {
+        openRow();
+        VisLabel name = gridLabel(label);
+        addLabel(name);
+        table.add(field).left().padRight(CONTENT_PAD);
+        StandardWidgetsFactory.addTooltip(name, tooltip);
+        StandardWidgetsFactory.addTooltip(field, tooltip);
         return this;
     }
 
@@ -577,7 +596,10 @@ public class PropertyGrid {
      * never the label, otherwise the text would ellipsize while there is still room next to it.
      */
     private void addLabel(String text) {
-        VisLabel label = gridLabel(text);
+        addLabel(gridLabel(text));
+    }
+
+    private void addLabel(VisLabel label) {
         table.add(label).minWidth(trackLabelWidth(label)).maxWidth(labelWidthCap).left()
                 .padLeft(CONTENT_PAD).padRight(LABEL_GAP);
     }

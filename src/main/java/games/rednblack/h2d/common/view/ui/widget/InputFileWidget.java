@@ -18,6 +18,7 @@
 
 package games.rednblack.h2d.common.view.ui.widget;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -29,7 +30,9 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
+import games.rednblack.h2d.common.MsgAPI;
 import games.rednblack.h2d.common.view.ui.StandardWidgetsFactory;
+import games.rednblack.puremvc.Facade;
 import org.lwjgl.util.tinyfd.TinyFileDialogs;
 
 import java.util.concurrent.ExecutorService;
@@ -75,32 +78,42 @@ public class InputFileWidget extends VisTable {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+                // A native dialog takes over the screen, so the editor dims behind it, the way every
+                // other path that opens one does: opening or saving a project, importing resources.
+                Facade facade = Facade.getInstance();
+                facade.sendNotification(MsgAPI.SHOW_BLACK_OVERLAY);
+
                 ExecutorService executor = Executors.newSingleThreadExecutor();
                 executor.execute(() -> {
-                    String selected;
+                    String chosen;
                     String defaultPath = textField.getText();
                     if (chooserMode == FileChooser.Mode.OPEN) {
                         //Open
                         if (chooserSelectionMode == FileChooser.SelectionMode.DIRECTORIES) {
                             //Select dir
-                            selected = TinyFileDialogs.tinyfd_selectFolderDialog("Choose a folder...", defaultPath);
+                            chosen = TinyFileDialogs.tinyfd_selectFolderDialog("Choose a folder...", defaultPath);
                         } else {
                             //Select file
-                            selected = TinyFileDialogs.tinyfd_openFileDialog("Choose a file...", defaultPath, null, null, chooserMultiSelect);
+                            chosen = TinyFileDialogs.tinyfd_openFileDialog("Choose a file...", defaultPath, null, null, chooserMultiSelect);
                         }
                     } else {
                         //Save
-                        selected = TinyFileDialogs.tinyfd_saveFileDialog("Choose a file...", defaultPath, null, null);
+                        chosen = TinyFileDialogs.tinyfd_saveFileDialog("Choose a file...", defaultPath, null, null);
                     }
 
-                    if (selected != null) {
-                        String[] files = selected.split("\\|");
-                        if (files.length == 1) {
-                            setValue(new FileHandle(files[0]));
-                        } else {
-                            //setValues(files);
+                    // back on the render thread: the overlay and this widget are both scene2d
+                    String selected = chosen;
+                    Gdx.app.postRunnable(() -> {
+                        facade.sendNotification(MsgAPI.HIDE_BLACK_OVERLAY);
+                        if (selected != null) {
+                            String[] files = selected.split("\\|");
+                            if (files.length == 1) {
+                                setValue(new FileHandle(files[0]));
+                            } else {
+                                //setValues(files);
+                            }
                         }
-                    }
+                    });
                 });
                 executor.shutdown();
             }
