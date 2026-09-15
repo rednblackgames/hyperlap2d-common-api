@@ -21,6 +21,7 @@ package games.rednblack.h2d.common.plugins;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import games.rednblack.editor.renderer.data.ProjectInfoVO;
 import games.rednblack.editor.renderer.ecs.Engine;
 import games.rednblack.h2d.common.IItemCommand;
@@ -97,6 +98,15 @@ public interface PluginAPI {
     void addMenuItem(String menu, String subMenuName, String notificationName);
 
     /**
+     * Adds new sub menu item to the top bar, with an icon shown next to its text
+     * @param menu unique identifier to global menu items provided in @Overlap2DMenuBar by three constants FILE_MENU, EDIT_MENU, WINDOWS_MENU
+     * @param subMenuName pretty string to name new submenu item
+     * @param notificationName unique notification id that will be fired when this menu item is clicked
+     * @param icon drawable rendered before the item text (22x22 px expected), null for a text-only item
+     */
+    void addMenuItem(String menu, String subMenuName, String notificationName, Drawable icon);
+
+    /**
      * Adds new tool to the tool bar
      * @param toolName pretty string to name new tool item
      * @param toolBtnStyle tool button style
@@ -123,6 +133,14 @@ public interface PluginAPI {
      * @param name pretty text to be written on this menu item
      */
     void setDropDownItemName(String action, String name);
+
+    /**
+     * Same as {@link #setDropDownItemName(String, String)}, but also sets an icon shown next to the item text.
+     * @param action unique name of notification id that will be fired when this menu item is clicked
+     * @param name pretty text to be written on this menu item
+     * @param icon drawable rendered before the item text (22x22 px expected), null for a text-only item
+     */
+    void setDropDownItemName(String action, String name, Drawable icon);
 
     /**
      * re-loads current project entirely (used when changes were made that require to whole project to be reloaded)
