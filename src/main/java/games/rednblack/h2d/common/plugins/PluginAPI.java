@@ -191,6 +191,14 @@ public interface PluginAPI {
     void showPopup(HashMap<String, String> actionsSet, Object observable);
 
     /**
+     * shows drop down menu with specified actions set, with an icon next to the items that have one
+     * @param actionsSet notification id -> item text
+     * @param actionIcons notification id -> icon drawable (22x22 px expected); ids not in the map render text-only
+     * @param observable item with right click on it
+     */
+    void showPopup(HashMap<String, String> actionsSet, HashMap<String, Drawable> actionIcons, Object observable);
+
+    /**
      * sets cursor to new one with cursorData
      * @param cursorData
      * @param region for plugin unic textureRegion
