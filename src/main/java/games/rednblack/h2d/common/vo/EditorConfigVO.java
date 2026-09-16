@@ -38,6 +38,7 @@ public class EditorConfigVO {
 
     public boolean disableAmbientComposite = true;
     public boolean showBoundingBoxes = false;
+    public boolean clickableTypingLabels = false;
     public float scrollVelocity = 30f;
     public boolean autoSave = false;
     public boolean enablePlugins = true;
