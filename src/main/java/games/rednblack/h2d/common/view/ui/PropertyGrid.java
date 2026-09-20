@@ -138,6 +138,17 @@ public class PropertyGrid {
         return this;
     }
 
+    /**
+     * Overrides the air a section title is given: above it, which is what sets it apart from
+     * whatever came before, and below it, which is what sets it apart from its own content. For a
+     * grid whose sections are blocks of their own rather than headings inside one panel.
+     */
+    public PropertyGrid sectionPad(int top, int bottom) {
+        sectionPadTop = top;
+        sectionPadBottom = bottom;
+        return this;
+    }
+
     public static PropertyGrid on(VisTable table) {
         return new PropertyGrid(table);
     }

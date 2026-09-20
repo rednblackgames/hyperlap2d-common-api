@@ -102,7 +102,16 @@ public class MsgAPI {
 
     public static final String ACTION_GROUP_ITEMS = SANDBOX_PREFIX + ".ACTION_GROUP_ITEMS";
     public static final String ACTION_CAMERA_CHANGE_COMPOSITE = SANDBOX_PREFIX + ".ACTION_CAMERA_CHANGE_COMPOSITE";
-    public static final String ACTION_CONVERT_TO_BUTTON = SANDBOX_PREFIX + ".ACTION_CONVERT_TO_BUTTON";
+    /** body: widget type name (String), defaults to a button */
+    public static final String ACTION_CONVERT_TO_WIDGET = SANDBOX_PREFIX + ".ACTION_CONVERT_TO_WIDGET";
+    /** body: Object[]{widget uniqueId, state name} */
+    public static final String ACTION_CHANGE_WIDGET_STATE = SANDBOX_PREFIX + ".ACTION_CHANGE_WIDGET_STATE";
+    public static final String ACTION_UPDATE_WIDGET_DATA = SANDBOX_PREFIX + ".ACTION_UPDATE_WIDGET_DATA";
+    public static final String ACTION_UPDATE_WIDGET_PART_DATA = SANDBOX_PREFIX + ".ACTION_UPDATE_WIDGET_PART_DATA";
+    /** A widget shows another state in the editor, body: widget uniqueId */
+    public static final String WIDGET_STATE_CHANGED = SANDBOX_PREFIX + ".WIDGET_STATE_CHANGED";
+    /** Edits have been turned into overrides of the state a widget shows, body: widget uniqueId */
+    public static final String WIDGET_OVERRIDES_RECORDED = SANDBOX_PREFIX + ".WIDGET_OVERRIDES_RECORDED";
     public static final String ACTION_CUT = SANDBOX_PREFIX + ".ACTION_CUT";
     public static final String ACTION_COPY = SANDBOX_PREFIX + ".ACTION_COPY";
     public static final String ACTION_PASTE = SANDBOX_PREFIX + ".ACTION_PASTE";
