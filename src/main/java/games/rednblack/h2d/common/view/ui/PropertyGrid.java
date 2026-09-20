@@ -149,6 +149,16 @@ public class PropertyGrid {
         return this;
     }
 
+    /**
+     * Extra air before the next row, for a section whose rows come in blocks that need telling
+     * apart without a title of their own.
+     */
+    public PropertyGrid gap(int height) {
+        if (!firstRow) table.row().padTop(height);
+        firstRow = true; // the gap already spaces the row that follows
+        return this;
+    }
+
     public static PropertyGrid on(VisTable table) {
         return new PropertyGrid(table);
     }
