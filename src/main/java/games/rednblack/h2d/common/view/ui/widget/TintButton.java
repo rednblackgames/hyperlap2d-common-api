@@ -19,38 +19,53 @@
 package games.rednblack.h2d.common.view.ui.widget;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.WidgetGroup;
 import com.kotcrab.vis.ui.VisUI;
 
 /**
- * Created by azakhary on 7/8/2014.
+ * A colour swatch. It is a layout aware group so a table can stretch it to the space it has; a
+ * table only resizes plain groups it is told the exact size of. Anywhere it is not stretched it
+ * keeps the size it was built with, which is what it reports as its preferred size.
  */
-public class TintButton extends Group {
+public class TintButton extends WidgetGroup {
 
     private final Skin skin;
     private final Image colorImg;
+    private final Image borderImg;
+    private final float prefWidth, prefHeight;
 
     private final Color colorValue = new Color();
 
     public TintButton(int width, int height) {
         skin = VisUI.getSkin();
         colorImg = new Image(skin.getDrawable("white"));
-        Image borderImg = new Image(skin.getDrawable("tint-border"));
-
-        colorImg.setWidth(width - 2);
-        colorImg.setHeight(height - 2);
-        colorImg.setX(1);
-        colorImg.setY(1);
-        borderImg.setWidth(width);
-        borderImg.setHeight(height);
+        borderImg = new Image(skin.getDrawable("tint-border"));
 
         addActor(colorImg);
         addActor(borderImg);
 
-        setWidth(borderImg.getWidth());
-        setHeight(borderImg.getHeight());
+        prefWidth = width;
+        prefHeight = height;
+        setSize(width, height);
+    }
+
+    @Override
+    public float getPrefWidth() {
+        return prefWidth;
+    }
+
+    @Override
+    public float getPrefHeight() {
+        return prefHeight;
+    }
+
+    /** The fill and the border follow the size the button has been given. */
+    @Override
+    public void layout() {
+        colorImg.setBounds(1, 1, getWidth() - 2, getHeight() - 2);
+        borderImg.setBounds(0, 0, getWidth(), getHeight());
     }
 
     public Color getColorValue() {
