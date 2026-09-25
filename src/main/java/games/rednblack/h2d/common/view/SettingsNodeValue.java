@@ -4,6 +4,14 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import games.rednblack.puremvc.Facade;
 
 public abstract class SettingsNodeValue<T> {
+
+    /**
+     * Air around a section title in a settings panel. The panel is a surface of its own, so its
+     * sections are blocks with room to breathe rather than headings packed into a dialog.
+     */
+    public static final int SECTION_PAD_TOP = 22;
+    public static final int SECTION_PAD_BOTTOM = 11;
+
     private final VisTable contentTable = new VisTable();
     private T settings;
     private final String name;

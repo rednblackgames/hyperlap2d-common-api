@@ -150,6 +150,17 @@ public class PropertyGrid {
     }
 
     /**
+     * Empty space taking whatever height is left over, so everything added after it sits at the
+     * bottom of the panel instead of following the row before. It only tells in a grid given more
+     * room than its rows need, such as a settings panel filling the dialog.
+     */
+    public PropertyGrid spring() {
+        openRow(0);
+        table.add().colspan(2).expandY();
+        return this;
+    }
+
+    /**
      * Extra air before the next row, for a section whose rows come in blocks that need telling
      * apart without a title of their own.
      */
