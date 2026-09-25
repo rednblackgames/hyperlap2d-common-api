@@ -64,6 +64,18 @@ public class CursorManager extends Proxy {
         setOverrideCursor(null);
     }
 
+    /**
+     * Forgets every cursor it has made.
+     * <p>
+     * A cursor belongs to the window that was current when it was created, and closing that window destroys
+     * it. The cache would go on handing out the dead one, and handing a destroyed cursor to X is fatal to
+     * the process - so when a window goes, what it may have made goes with it. They are not disposed here:
+     * they already are.
+     */
+    public void invalidateCache() {
+        cursorCache.clear();
+    }
+
     public void displayCustomCursor() {
         setCursorPixmap(region);
     }

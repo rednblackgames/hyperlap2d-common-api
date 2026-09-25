@@ -18,6 +18,7 @@
 
 package games.rednblack.h2d.common.plugins;
 
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -229,4 +230,14 @@ public interface PluginAPI {
      * returns current project info
      */
     ProjectInfoVO getCurrentProjectInfoVO();
+
+    /**
+     * Opens a separate application window, the way the live preview does. The window is driven by the same
+     * loop as the editor: the listener's callbacks arrive on the render thread with that window current, and
+     * anything it draws needs its own batch, since sharing a GL context does not share vertex array objects.
+     *
+     * @param onClose run when the window closes, however it closes
+     * @return a handle on the window, or null when the backend has no windows to give
+     */
+    H2DWindow newWindow(ApplicationListener listener, String title, int width, int height, boolean resizable, Runnable onClose);
 }
